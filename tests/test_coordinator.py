@@ -88,9 +88,9 @@ async def test_coordinator_filtering_logic(mock_cache_cls, mock_get_session, has
     mock_resp.status = 200
     mock_resp.json.return_value = _get_mock_feed([
         # USA eq under threshold (2.9 < 3.0) -> skip
-        {"id": "eq_usa_small", "properties": {"mag": 2.9, "place": "California", "time": 0}, "geometry": {"coordinates": [0,0,0]}},
-        # USA eq over threshold -> keep
-        {"id": "eq_usa_big", "properties": {"mag": 3.5, "place": "California", "time": 0}, "geometry": {"coordinates": [0,0,0]}},
+        {"id": "eq_usa_small", "properties": {"mag": 2.9, "place": "San Francisco, CA", "time": 0}, "geometry": {"coordinates": [0,0,0]}},
+        # USA eq over threshold -> keep (Notice we added ", CA" so it maps as USA)
+        {"id": "eq_usa_big", "properties": {"mag": 3.5, "place": "Los Angeles, CA", "time": 0}, "geometry": {"coordinates": [0,0,0]}},
         # Global eq under threshold (4.9 < 5.0) -> skip
         {"id": "eq_global_small", "properties": {"mag": 4.9, "place": "Italy", "time": 0}, "geometry": {"coordinates": [0,0,0]}},
         # Global eq over threshold and in EUROPE -> keep

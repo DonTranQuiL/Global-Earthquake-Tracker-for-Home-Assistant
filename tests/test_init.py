@@ -13,7 +13,8 @@ def auto_enable_custom_integrations(enable_custom_integrations):
 
 @pytest.fixture
 def mock_coordinator_deps():
-    with patch("custom_components.global_earthquakes.GlobalEarthquakeCache") as mock_cache_cls, \
+    # FIX: Patch directly in the coordinator where the cache is loaded
+    with patch("custom_components.global_earthquakes.coordinator.GlobalEarthquakeCache") as mock_cache_cls, \
          patch("custom_components.global_earthquakes.GlobalEarthquakeCoordinator") as mock_coord_cls:
         
         mock_cache = MagicMock()
