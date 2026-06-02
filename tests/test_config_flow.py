@@ -11,16 +11,14 @@ from custom_components.global_earthquakes.const import (
     CONF_MIN_MAG_USA,
     CONF_MIN_MAG_GLOBAL,
     CONF_MAP_MARKERS,
-    DEFAULT_SCAN_INTERVAL,
-    DEFAULT_MIN_MAG_USA,
-    DEFAULT_MIN_MAG_GLOBAL,
-    DEFAULT_MAP_MARKERS,
 )
+
 
 @pytest.fixture(autouse=True)
 def auto_enable_custom_integrations(enable_custom_integrations):
     """Enable loading custom components during testing."""
     yield
+
 
 @pytest.mark.asyncio
 async def test_form_user_success(hass):
@@ -31,7 +29,9 @@ async def test_form_user_success(hass):
     assert result["type"] == FlowResultType.FORM
     assert result["step_id"] == "user"
 
-    with patch("custom_components.global_earthquakes.async_setup_entry", return_value=True):
+    with patch(
+        "custom_components.global_earthquakes.async_setup_entry", return_value=True
+    ):
         result2 = await hass.config_entries.flow.async_configure(
             result["flow_id"],
             {
@@ -53,12 +53,18 @@ async def test_form_user_success(hass):
     assert result2["data"][CONF_MAP_MARKERS] == 10
     assert result2["data"][CONF_SCAN_INTERVAL] == 600
 
+
 @pytest.mark.asyncio
 async def test_options_flow(hass):
     """Test options flow to update thresholds and regions dynamically."""
     entry = MockConfigEntry(
         domain=DOMAIN,
-        data={CONF_INSTANCE_NAME: "Global", CONF_MIN_MAG_USA: 2.5, CONF_MIN_MAG_GLOBAL: 4.5, CONF_MAP_MARKERS: 20},
+        data={
+            CONF_INSTANCE_NAME: "Global",
+            CONF_MIN_MAG_USA: 2.5,
+            CONF_MIN_MAG_GLOBAL: 4.5,
+            CONF_MAP_MARKERS: 20,
+        },
         options={CONF_SCAN_INTERVAL: 300},
     )
     entry.add_to_hass(hass)

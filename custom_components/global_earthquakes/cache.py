@@ -4,6 +4,7 @@ import logging
 
 _LOGGER = logging.getLogger(__name__)
 
+
 class GlobalEarthquakeCache:
     def __init__(self, hass, instance_name):
         self.hass = hass
@@ -14,7 +15,9 @@ class GlobalEarthquakeCache:
             .replace(" ", "_")
             .lower()
         )
-        self.cache_path = os.path.join(current_dir, f".global_earthquakes_{safe_name}.json")
+        self.cache_path = os.path.join(
+            current_dir, f".global_earthquakes_{safe_name}.json"
+        )
 
     def load_cache(self):
         if os.path.exists(self.cache_path):

@@ -2,22 +2,28 @@ import logging
 import os
 from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.components.http import StaticPathConfig  # <--- NEW IMPORT FOR HA 2024+
+from homeassistant.components.http import (
+    StaticPathConfig,
+)  # <--- NEW IMPORT FOR HA 2024+
 from .const import DOMAIN, PLATFORMS
 from .coordinator import GlobalEarthquakeCoordinator
 
 _LOGGER = logging.getLogger(__name__)
+
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # --- NEW: REGISTER LOCAL IMAGES FOLDER (UPDATED FOR MODERN HA) ---
     local_media_path = hass.config.path(f"custom_components/{DOMAIN}/www")
     if os.path.exists(local_media_path):
         # Using the new async method required by newer Home Assistant versions
-        await hass.http.async_register_static_paths([
-            StaticPathConfig("/global_earthquakes_assets", local_media_path, True)
-        ])
+        await hass.http.async_register_static_paths(
+            [StaticPathConfig("/global_earthquakes_assets", local_media_path, True)]
+        )
     else:
-        _LOGGER.warning("The 'www' folder does not exist at %s. Custom map pins will not load.", local_media_path)
+        _LOGGER.warning(
+            "The 'www' folder does not exist at %s. Custom map pins will not load.",
+            local_media_path,
+        )
     # -----------------------------------------
 
     coordinator = GlobalEarthquakeCoordinator(hass, entry)

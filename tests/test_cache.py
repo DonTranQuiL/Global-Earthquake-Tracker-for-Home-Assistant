@@ -1,8 +1,7 @@
-import pytest
-import os
 import json
 from unittest.mock import patch, mock_open, MagicMock
 from custom_components.global_earthquakes.cache import GlobalEarthquakeCache
+
 
 def test_cache_management():
     hass = MagicMock()
@@ -16,13 +15,17 @@ def test_cache_management():
 
     # 2. Load valid cache
     mock_data = [{"id": "eq1"}]
-    with patch("os.path.exists", return_value=True), \
-         patch("builtins.open", mock_open(read_data=json.dumps(mock_data))):
+    with (
+        patch("os.path.exists", return_value=True),
+        patch("builtins.open", mock_open(read_data=json.dumps(mock_data))),
+    ):
         assert cache.load_cache() == mock_data
 
     # 3. Load corrupted cache
-    with patch("os.path.exists", return_value=True), \
-         patch("builtins.open", mock_open(read_data="NOT JSON FORMAT")):
+    with (
+        patch("os.path.exists", return_value=True),
+        patch("builtins.open", mock_open(read_data="NOT JSON FORMAT")),
+    ):
         assert cache.load_cache() == []
 
     # 4. Save cache

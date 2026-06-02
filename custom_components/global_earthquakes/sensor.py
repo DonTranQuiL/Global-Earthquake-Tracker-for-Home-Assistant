@@ -7,15 +7,18 @@ from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
+
 async def async_setup_entry(hass, entry, async_add_entities):
     coordinator = hass.data[DOMAIN][entry.entry_id]
     instance_name = entry.data["instance_name"]
 
     # 1. Add the permanent, static sensors
-    async_add_entities([
-        GlobalEarthquakeSensor(coordinator, instance_name),
-        EarthquakeLastUpdateSensor(coordinator, instance_name),
-    ])
+    async_add_entities(
+        [
+            GlobalEarthquakeSensor(coordinator, instance_name),
+            EarthquakeLastUpdateSensor(coordinator, instance_name),
+        ]
+    )
 
     # 2. THE DYNAMIC ENTITY MANAGER
     # This dictionary keeps track of earthquakes currently tracked by Home Assistant
@@ -28,7 +31,9 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
         if coordinator.data:
             # Obey the user's maximum marker limit from the cogwheel
-            num_markers = entry.options.get("map_markers", entry.data.get("map_markers", 20))
+            num_markers = entry.options.get(
+                "map_markers", entry.data.get("map_markers", 20)
+            )
             top_events = coordinator.data[:num_markers]
 
             for event in top_events:
@@ -37,7 +42,9 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
                 if eq_id not in active_entities:
                     # NEW EARTHQUAKE DETECTED! Spawn a dynamic entity for it.
-                    new_sensor = GlobalEarthquakeEventSensor(coordinator, instance_name, eq_id)
+                    new_sensor = GlobalEarthquakeEventSensor(
+                        coordinator, instance_name, eq_id
+                    )
                     active_entities[eq_id] = new_sensor
                     new_entities.append(new_sensor)
 
@@ -54,7 +61,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
     # Attach this manager to the coordinator so it runs every time data updates
     coordinator.async_add_listener(async_update_entities)
-    
+
     # Run it once right now to populate the initial list
     async_update_entities()
 
@@ -94,7 +101,7 @@ class GlobalEarthquakeSensor(GlobalBaseEntity):
     def extra_state_attributes(self):
         if not self.coordinator.data:
             return {}
-        
+
         latest = self.coordinator.data[0]
         return {
             "location": latest.get("location"),
@@ -160,7 +167,7 @@ class GlobalEarthquakeEventSensor(GlobalBaseEntity):
         data = self._event_data
         if not data:
             return None
-            
+
         event_type = data.get("event_type", "").lower()
         tsunami_warning = data.get("tsunami_warning", False)
         base_url = "/global_earthquakes_assets"
@@ -179,7 +186,7 @@ class GlobalEarthquakeEventSensor(GlobalBaseEntity):
         data = self._event_data
         if not data:
             return {}
-        
+
         return {
             "latitude": data.get("latitude"),
             "longitude": data.get("longitude"),
