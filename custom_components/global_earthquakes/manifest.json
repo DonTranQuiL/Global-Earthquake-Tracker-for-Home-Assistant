@@ -6,11 +6,13 @@
     "@Malosaaa"
   ],
   "config_flow": true,
-  "dependencies": ["http"],
+  "dependencies": [
+    "http"
+  ],
   "documentation": "https://github.com/DonTranquiL/Global-Earthquake-Tracker-for-Home-Assistant",
   "integration_type": "service",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/DonTranquiL/Global-Earthquake-Tracker-for-Home-Assistant/issues",
   "requirements": [],
-  "version": "1.0.3"
+  "version": "1.0.4"
 }
