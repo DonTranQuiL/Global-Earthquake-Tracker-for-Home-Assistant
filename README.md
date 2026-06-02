@@ -1,6 +1,7 @@
 <div align="center">
 
-<img width="870" height="421" alt="Global Earthquake Tracker Header" src="https://api.iconify.design/mdi:earth-box.svg?color=%23007ec6&width=200&height=200" />
+<img width="1024" height="434" alt="Global Earthquake Tracker Header"  src="https://github.com/user-attachments/assets/e541c943-38d1-436f-9f42-5458d28b753e" />
+
 
 # 🌍 Global Earthquake Tracker
 **The high-performance, real-time global seismic and tsunami early warning system for Home Assistant.**
@@ -89,6 +90,9 @@ Build a complete, professional-grade seismic operations center directly inside y
 ### 📍 The Auto-Updating Live Map
 *Requires [auto-entities](https://github.com/thomasloven/lovelace-auto-entities) from HACS.* This card automatically hunts down newly spawned earthquakes and drops them onto the map, while hiding the anchor sensors.
 
+<img width="379" height="448" alt="{35F81328-F96D-4ADB-91F1-B60E4CEF7227}" src="https://github.com/user-attachments/assets/f4c615d8-10ab-490c-8065-96168f19ace1" />
+
+
 ```yaml
 type: custom:auto-entities
 show_empty: false
@@ -108,6 +112,8 @@ filter:
 ```
 ## 🌍 The Glassmorphism Seismic Log
 Requires flex-table-card and card-mod from HACS. Pulls the history array from the anchor sensor to create a stunning, color-coded telemetry table that automatically cycles out old data.
+<img width="744" height="189" alt="{FBD80937-754F-41F2-BD0A-C0B0CCE9DE3E}" src="https://github.com/user-attachments/assets/0093c8fe-59e6-46e9-be87-ce66eb25fd0a" />
+
 
 ```yaml
 type: custom:flex-table-card
@@ -208,5 +214,6 @@ columns:
       var tsuHtml = x.tsunami_warning ? `<div style="background:#7f1d1d; color:#fca5a5; border:1px solid #ef444460; padding:3px 8px; border-radius:12px; font-size:10px; font-weight:800; margin-top:4px; display:inline-block; letter-spacing:0.05em;">🌊 TSUNAMI</div>` : "";
       (alertHtml || tsuHtml) ? `<div style="display:flex; flex-direction:column; gap:4px; align-items:center;">${alertHtml}${tsuHtml}</div>` : `<span style="color:rgba(255,255,255,0.2); font-size:11px; font-weight:600;">NO ALERT</span>`
 ```
+
 ## 🤝 Credits
 A massive thank you to the United States Geological Survey (USGS) for providing open-access, real-time seismic telemetry to the public.
