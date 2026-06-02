@@ -1,0 +1,31 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Global Earthquake Tracker",
+        "description": "Configure your monitoring settings. Split thresholds allow you to filter out noisy micro-quakes in the USA while keeping a strict watch on Europe.",
+        "data": {
+          "instance_name": "Tracker Name (e.g., Global Alerts)",
+          "min_mag_usa": "USA Minimum Magnitude (e.g., 4.0)",
+          "min_mag_global": "Rest of World Minimum Magnitude (e.g., 2.5)",
+          "monitored_countries": "Regions to Monitor",
+          "scan_interval": "Update Interval (Seconds)"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Update Earthquake Settings",
+        "description": "Adjust your monitored regions or minimum magnitude thresholds.",
+        "data": {
+          "min_mag_usa": "USA Minimum Magnitude",
+          "min_mag_global": "Rest of World Minimum Magnitude",
+          "monitored_countries": "Monitored Regions",
+          "scan_interval": "Update Interval (Seconds)"
+        }
+      }
+    }
+  }
+}

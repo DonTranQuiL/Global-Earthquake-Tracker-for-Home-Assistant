@@ -1,0 +1,58 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "KNMI Seismische Activiteit",
+        "description": "Stel de KNMI aardbevingen monitor in.",
+        "data": {
+          "instance_name": "Naam (bijv. Nederland)",
+          "search_terms": "Zoektermen (komma gescheiden, leeg voor alles)",
+          "scan_interval": "Scan Interval (seconden)"
+        }
+      }
+    },
+    "error": {
+      "required": "Vul alstublieft een naam in."
+    },
+    "abort": {
+      "already_configured": "Deze naam is al geconfigureerd."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "KNMI Seismisch Opties",
+        "data": {
+          "search_terms": "Zoektermen (komma gescheiden, leeg voor alles)",
+          "scan_interval": "Scan Interval (seconden)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "earthquakes": {
+        "name": "Aardbevingen"
+      },
+      "last_update": {
+        "name": "Laatste Update Tijd"
+      },
+      "last_status": {
+        "name": "Laatste Update Status"
+      },
+      "errors": {
+        "name": "Aaneengesloten Fouten"
+      }
+    }
+  },
+  "services": {
+    "refresh": {
+      "name": "Refresh KNMI Seismisch",
+      "description": "Forceert een directe download en update van de laatste KNMI aardbevingen data."
+    },
+    "clear_files": {
+      "name": "Clear Cache & Debug (KNMI)",
+      "description": "Verwijdert de opgeslagen cache.json en het debug.txt bestand van de KNMI integratie."
+    }
+  }
+}
