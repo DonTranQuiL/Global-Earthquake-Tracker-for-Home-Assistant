@@ -1,7 +1,0 @@
-refresh:
-  name: Refresh Global Earthquake
-  description: Forced refresh of Global Earthquake.
-
-clear_files:
-  name: Clear Cache & Debug (GlobalEarthquake)
-  description: Deletes the debus file from Global Earthquake.
