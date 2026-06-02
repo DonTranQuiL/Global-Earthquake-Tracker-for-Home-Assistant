@@ -20,6 +20,7 @@ from .const import (
 )
 
 _LOGGER = logging.getLogger(__name__)
+
 COUNTRY_OPTIONS = [
     {"value": "ALL", "label": "Worldwide (All Countries)"},
     {"value": "EUROPE", "label": "Europe (All Countries Group)"},
@@ -102,43 +103,6 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     mode=selector.SelectSelectorMode.DROPDOWN,
                 )
             ),
-            vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): int,
-        })
-        
-        return self.async_show_form(step_id="user", data_schema=data_schema, errors=errors)
-
-    @staticmethod
-    @callback
-    def async_get_options_flow(config_entry):
-        return OptionsFlowHandler()
-
-
-class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    VERSION = 1
-
-    async def async_step_user(self, user_input=None) -> FlowResult:
-        errors = {}
-        if user_input is not None:
-            return self.async_create_entry(
-                title=f"Earthquakes ({user_input[CONF_INSTANCE_NAME]})",
-                data=user_input,
-                options=user_input,
-            )
-
-        data_schema = vol.Schema({
-            vol.Required(CONF_INSTANCE_NAME, default="Global Tracker"): str,
-            vol.Required(CONF_MIN_MAG_USA, default=DEFAULT_MIN_MAG_USA): vol.Coerce(float),
-            vol.Required(CONF_MIN_MAG_GLOBAL, default=DEFAULT_MIN_MAG_GLOBAL): vol.Coerce(float),
-            vol.Required(
-                CONF_MONITORED_COUNTRIES, 
-                default=["ALL"]
-            ): selector.SelectSelector(
-                selector.SelectSelectorConfig(
-                    options=COUNTRY_OPTIONS,
-                    multiple=True,
-                    mode=selector.SelectSelectorMode.DROPDOWN,
-                )
-            ),
             vol.Required(
                 CONF_MAP_MARKERS, 
                 default=DEFAULT_MAP_MARKERS
@@ -154,6 +118,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     @callback
     def async_get_options_flow(config_entry):
         return OptionsFlowHandler()
+
 
 class OptionsFlowHandler(config_entries.OptionsFlow):
     async def async_step_init(self, user_input=None) -> FlowResult:
