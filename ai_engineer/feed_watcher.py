@@ -55,8 +55,8 @@ Include:
 """
 
 completion = client.chat.completions.create(
-    model="gpt-4o-mini", # Using the cheapest, fastest reasoning model
-    messages=[{"role": "user", "content": prompt}]
+    model="gpt-4o-mini",  # Using the cheapest, fastest reasoning model
+    messages=[{"role": "user", "content": prompt}],
 )
 
 report_content = completion.choices[0].message.content
@@ -66,5 +66,5 @@ with open("ai_report.md", "w") as f:
     f.write(report_content)
 
 # Tell the GitHub Action runner that a change was detected
-with open(os.environ['GITHUB_ENV'], 'a') as f:
+with open(os.environ["GITHUB_ENV"], "a") as f:
     f.write("SCHEMA_CHANGED=true\n")

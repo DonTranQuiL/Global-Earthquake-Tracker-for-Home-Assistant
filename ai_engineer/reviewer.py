@@ -1,5 +1,4 @@
 import os
-import json
 import requests
 from openai import OpenAI
 
@@ -45,8 +44,8 @@ Diff:
 """
 
 completion = client.chat.completions.create(
-    model="meta-llama/llama-3-8b-instruct:free", # Completely free model!
-    messages=[{"role": "user", "content": prompt}]
+    model="meta-llama/llama-3-8b-instruct:free",  # Completely free model!
+    messages=[{"role": "user", "content": prompt}],
 )
 
 review_comment = completion.choices[0].message.content.strip()
@@ -54,18 +53,18 @@ review_comment = completion.choices[0].message.content.strip()
 # 3. Post the comment back to GitHub
 if review_comment != "APPROVED":
     print("Issues found. Posting comment to PR...")
-    
+
     repo = os.getenv("GITHUB_REPOSITORY")
     pr_number = os.getenv("PR_NUMBER")
     token = os.getenv("GITHUB_TOKEN")
-    
+
     url = f"https://api.github.com/repos/{repo}/issues/{pr_number}/comments"
     headers = {
         "Authorization": f"Bearer {token}",
-        "Accept": "application/vnd.github.v3+json"
+        "Accept": "application/vnd.github.v3+json",
     }
     data = {"body": f"🤖 **AI Maintainer Review:**\n\n{review_comment}"}
-    
+
     response = requests.post(url, headers=headers, json=data)
     if response.status_code == 201:
         print("Comment posted successfully!")
