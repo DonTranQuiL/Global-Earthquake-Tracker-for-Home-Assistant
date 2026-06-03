@@ -47,21 +47,21 @@ print("Analyzing issue...")
 try:
     completion = client.chat.completions.create(
         model="meta-llama/llama-3-8b-instruct:free",
-        messages=[{"role": "user", "content": prompt}]
+        messages=[{"role": "user", "content": prompt}],
     )
-    
+
     response_text = completion.choices[0].message.content.strip()
-    
+
     # Strip markdown if the AI accidentally included it
     if response_text.startswith("```json"):
         response_text = response_text[7:-3]
     elif response_text.startswith("```"):
         response_text = response_text[3:-3]
-        
+
     triage_data = json.loads(response_text)
     labels = triage_data.get("labels", [])
     comment = triage_data.get("comment", "")
-    
+
 except Exception as e:
     print(f"Failed to analyze issue: {e}")
     exit(1)
@@ -69,7 +69,7 @@ except Exception as e:
 # 3. Setup GitHub API Auth
 headers = {
     "Authorization": f"Bearer {token}",
-    "Accept": "application/vnd.github.v3+json"
+    "Accept": "application/vnd.github.v3+json",
 }
 
 # 4. Apply the Labels to the Issue
@@ -82,6 +82,8 @@ if labels:
 if comment:
     print("Posting comment...")
     comment_url = f"https://api.github.com/repos/{repo}/issues/{issue_number}/comments"
-    requests.post(comment_url, headers=headers, json={"body": f"🤖 **AI Triage:**\n\n{comment}"})
+    requests.post(
+        comment_url, headers=headers, json={"body": f"🤖 **AI Triage:**\n\n{comment}"}
+    )
 
 print("Triage complete!")
