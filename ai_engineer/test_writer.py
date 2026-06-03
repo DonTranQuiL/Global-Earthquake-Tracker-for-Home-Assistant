@@ -43,17 +43,17 @@ print("Analyzing merged code and generating test...")
 try:
     completion = client.chat.completions.create(
         model="meta-llama/llama-3-8b-instruct:free",
-        messages=[dict(role="user", content=prompt)]
+        messages=[dict(role="user", content=prompt)],
     )
-    
+
     response_text = completion.choices[0].message.content.strip()
-    
+
     # 3. Parse the custom text format
     lines = response_text.splitlines()
     file_path = None
     code_lines = []
     is_code = False
-    
+
     for line in lines:
         if line.startswith("FILEPATH:"):
             file_path = line.replace("FILEPATH:", "").strip()
@@ -63,9 +63,9 @@ try:
             # Clean up markdown if the LLM hallucinated it
             if not line.startswith("```"):
                 code_lines.append(line)
-                
+
     new_code = "\n".join(code_lines)
-    
+
     # 4. Save the new test to the disk
     if file_path and new_code:
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
@@ -74,6 +74,6 @@ try:
         print(f"Successfully wrote new test to {file_path}")
     else:
         print("Could not parse the LLM response correctly.")
-        
+
 except Exception as e:
     print(f"Failed to generate test: {e}")
