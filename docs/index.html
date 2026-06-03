@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Earthquake Tracker for Home Assistant</title>
+    
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-blue: #38bdf8;
+            --accent-green: #10b981;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- Layout & Glassmorphism --- */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        /* --- Typography --- */
+        h1, h2, h3 {
+            color: #ffffff;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); text-align: center; }
+        h2 { font-size: clamp(1.4rem, 3vw, 1.8rem); border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem; margin-top: 1.5rem;}
+        h3 { font-size: clamp(1.2rem, 2vw, 1.4rem); color: var(--accent-blue); margin-top: 1rem; }
+        p { color: var(--text-muted); margin-bottom: 1rem; }
+        ul, ol { color: var(--text-muted); margin-bottom: 1rem; padding-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+        a { color: var(--accent-blue); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* --- Images & Badges --- */
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+        }
+        
+        .hero-img {
+            margin: 0 auto 2rem auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            width: 100%;
+        }
+
+        .badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .badges img {
+            border-radius: 4px;
+            transition: transform 0.2s ease;
+        }
+
+        .badges img:hover {
+            transform: translateY(-2px);
+        }
+
+        /* --- Alert Box --- */
+        .alert-box {
+            background: rgba(234, 179, 8, 0.1);
+            border-left: 4px solid #eab308;
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+        .alert-box strong { color: #fde047; }
+
+        /* --- Code Blocks --- */
+        pre {
+            background: #1e293b;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 1.5rem;
+        }
+        code {
+            font-family: "Fira Code", Consolas, Monaco, monospace;
+            color: #e2e8f0;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        /* --- Grid for Features --- */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        /* --- Animations --- */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Delay cascade for grids */
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--glass-border);
+            margin-top: 3rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .container { padding: 1rem; }
+            .glass-panel { padding: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <header class="animate-on-scroll is-visible">
+        <img class="hero-img" src="https://github.com/user-attachments/assets/e541c943-38d1-436f-9f42-5458d28b753e" alt="Global Earthquake Tracker Header" onerror="this.src='https://placehold.co/1024x434/0f172a/38bdf8?text=Global+Earthquake+Tracker'">
+        <h1>🌍 Global Earthquake Tracker</h1>
+        <p style="text-align: center; font-size: clamp(1rem, 2vw, 1.2rem); color: var(--text-main); max-width: 800px; margin: 0 auto 1.5rem auto;">The high-performance, real-time global seismic and tsunami early warning system for Home Assistant.</p>
+        
+        <div class="alert-box">
+            <strong>⚠️ LATEST RELEASE ANNOUNCEMENT:</strong> We have successfully migrated to a <strong>Dynamic Entity Lifecycle Engine</strong>! The tracker now securely hooks into the USGS 7-Day API, utilizing dual-magnitude thresholds and zero-bloat spawning logic. Custom local map pins and Tsunami warnings are now fully supported!
+        </div>
+
+        <div class="badges">
+            <a href="https://github.com/DonTranQuiL/Global-Earthquake-Tracker-for-Home-Assistant/releases" target="_blank"><img src="https://img.shields.io/github/v/release/DonTranQuiL/Global-Earthquake-Tracker-for-Home-Assistant?style=for-the-badge&color=007ec6" alt="Latest Release"></a>
+            <a href="https://github.com/DonTranQuiL/Global-Earthquake-Tracker-for-Home-Assistant/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/github/license/DonTranQuiL/Global-Earthquake-Tracker-for-Home-Assistant?style=for-the-badge&color=007ec6" alt="License"></a>
+            <a href="https://github.com/DonTranQuiL/Global-Earthquake-Tracker-for-Home-Assistant/actions/workflows/hass-ci.yml" target="_blank"><img src="https://img.shields.io/github/actions/workflow/status/DonTranQuiL/Global-Earthquake-Tracker-for-Home-Assistant/hass-ci.yml?label=Home%20Assistant%20CI&style=for-the-badge" alt="Home Assistant CI"></a>
+            <a href="https://github.com/DonTranQuiL/Global-Earthquake-Tracker-for-Home-Assistant/actions" target="_blank"><img src="https://img.shields.io/github/actions/workflow/status/DonTranQuiL/Global-Earthquake-Tracker-for-Home-Assistant/codechecker.yml?style=for-the-badge&label=CODE%20CHECKS&color=5dbb0f" alt="Code Checks"></a>
+            <a href="https://hacs.xyz/" target="_blank"><img src="https://img.shields.io/badge/HACS-CUSTOM-ff6e27?style=for-the-badge" alt="HACS Custom"></a>
+            <a href="https://www.home-assistant.io/" target="_blank"><img src="https://img.shields.io/badge/Home%20Assistant-2025.1%2B-007ec6?style=for-the-badge" alt="Home Assistant Version"></a>
+            <a href="https://ko-fi.com/DonTranQuiL" target="_blank"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-ffdd00?style=for-the-badge" alt="Donate"></a>
+        </div>
+    </header>
+
+    <section class="glass-panel animate-on-scroll">
+        <h3>🚨 Real-Time Seismic Intelligence</h3>
+        <p>Bring ultra-fast, live earthquake and tsunami telemetry directly into Home Assistant using the official <strong>USGS Worldwide Network API</strong>. Engineered for precision, this integration filters out the noise (like quarry blasts) and delivers highly accurate, color-coded map pins for actual tectonic events anywhere on the globe.</p>
+    </section>
+
+    <h2 class="animate-on-scroll">🌟 Core Features & Architecture</h2>
+    <div class="feature-grid">
+        <div class="glass-panel animate-on-scroll delay-1">
+            <h3>🎛️ Dual-Magnitude Smart Filtering</h3>
+            <p>The USGS sensor network inside the USA is hyper-sensitive, capturing thousands of microscopic 1.0M rumbles, while global stations usually only guarantee detection at 4.5M. Set <strong>two independent magnitude sliders</strong>—one for the USA, and one for the Rest of the World. Filter out North American noise while maintaining a strict watch on Europe and beyond!</p>
+        </div>
+        
+        <div class="glass-panel animate-on-scroll delay-2">
+            <h3>🧹 Dynamic Zero-Bloat Lifecycle</h3>
+            <p>Standard integrations spin up permanent entities, destroying your database. This component enforces a strict <strong>Dynamic Lifecycle Policy</strong>: it spawns a unique sensor only when a fresh earthquake appears. When it ages out of the 7-day feed, it applies an aggressive <code>force_remove</code>. No lingering states. Just a pristine database.</p>
+        </div>
+        
+        <div class="glass-panel animate-on-scroll delay-1">
+            <h3>🔬 Rich Scientific Telemetry</h3>
+            <ul>
+                <li><strong>Tsunami Warnings:</strong> Instant boolean flags if a tsunami is generated.</li>
+                <li><strong>Alert Levels:</strong> USGS PAGER system estimating human/economic impact.</li>
+                <li><strong>Event Type:</strong> Clearly labels Earthquake, Volcano, or Ice Quake.</li>
+                <li><strong>Depth & Coordinates:</strong> Highly accurate telemetry for map mapping.</li>
+            </ul>
+        </div>
+
+        <div class="glass-panel animate-on-scroll delay-2">
+            <h3>🗺️ Custom Map Icons</h3>
+            <p>Prioritize your local files over standard Material Design Icons. Drop transparent <code>.png</code> files (earthquake, tsunami, volcano) inside <code>/config/custom_components/global_earthquakes/www/</code> and your Live Map will dynamically swap icons based on the disaster type!</p>
+        </div>
+    </div>
+
+    <section class="glass-panel animate-on-scroll">
+        <h2>📥 Installation</h2>
+        
+        <h3>Method 1: HACS (Recommended)</h3>
+        <ol>
+            <li>Open <strong>HACS</strong> in your sidebar and navigate into the <strong>Integrations</strong> panel.</li>
+            <li>Click the three dots (<code>...</code>) located in the upper right quadrant and select <strong>Custom repositories</strong>.</li>
+            <li>Input the repository web link: <code>https://github.com/DonTranQuiL/Global-Earthquake-Tracker-for-Home-Assistant</code></li>
+            <li>Set the Category selector dropdown to <strong>Integration</strong> and hit <strong>Add</strong>.</li>
+            <li>Locate the newly added <strong>Global Earthquakes</strong> repository card and hit <strong>Download</strong>.</li>
+            <li>⚠️ <strong>Restart your Home Assistant instance</strong>.</li>
+            <li>Navigate to <strong>Settings > Devices & Services > Add Integration</strong>, lookup <strong>Global Earthquakes</strong>, and configure your regions.</li>
+        </ol>
+
+        <h3 style="margin-top: 2rem;">Method 2: Manual Installation</h3>
+        <ol>
+            <li>Download the latest release from the <a href="https://github.com/DonTranQuiL/Global-Earthquake-Tracker-for-Home-Assistant/releases" target="_blank">Releases page</a>.</li>
+            <li>Extract the <code>global_earthquakes</code> folder into your Home Assistant's <code>custom_components</code> directory.</li>
+            <li>⚠️ <strong>Restart your Home Assistant instance</strong>.</li>
+            <li>Configure via <strong>Settings > Devices & Services > Add Integration</strong>.</li>
+        </ol>
+    </section>
+
+    <section class="animate-on-scroll">
+        <h2>⚙️ Interactive Lovelace Dashboard Configurations</h2>
+        <p style="margin-bottom: 2rem;">Build a complete, professional-grade seismic operations center directly inside your Lovelace dashboard using community cards.</p>
+
+        <div class="glass-panel">
+            <h3>📍 The Auto-Updating Live Map</h3>
+            <p><em>Requires auto-entities from HACS.</em> Automatically hunts down newly spawned earthquakes and drops them onto the map.</p>
+            <img src="https://github.com/user-attachments/assets/f4c615d8-10ab-490c-8065-96168f19ace1" alt="Live Map Example" style="max-width: 400px; margin: 1rem auto; display: block;" onerror="this.src='https://placehold.co/379x448/1e293b/38bdf8?text=Map+Preview'">
+            
+<pre><code>type: custom:auto-entities
+show_empty: false
+card:
+  type: map
+  title: Live Epicenters
+  default_zoom: 4
+  dark_mode: true
+  entities: []
+filter:
+  include:
+    - entity_id: "sensor.earthquake_tracker_global_tracker_*"
+  exclude:
+    - entity_id: "sensor.earthquake_tracker_global_tracker"
+    - entity_id: "*last_sync*"
+    - entity_id: "*last_update*"</code></pre>
+        </div>
+
+        <div class="glass-panel animate-on-scroll">
+            <h3>🌍 The Glassmorphism Seismic Log</h3>
+            <p><em>Requires flex-table-card and card-mod from HACS.</em> Pulls the history array to create a stunning, color-coded telemetry table.</p>
+            <img src="https://github.com/user-attachments/assets/0093c8fe-59e6-46e9-be87-ce66eb25fd0a" alt="Seismic Log Table" style="margin: 1rem auto;" onerror="this.src='https://placehold.co/744x189/1e293b/38bdf8?text=Table+Preview'">
+            
+<pre><code>type: custom:flex-table-card
+title: 🌍 Live Seismic Log
+icon: mdi:pulse
+strict: false
+sort_by:
+  - magnitude-
+max_rows: 20
+entities:
+  include: sensor.earthquake_tracker_global_tracker
+css:
+  table+: |
+    border-collapse: collapse;
+    width: 100%;
+  tbody tr:nth-child(even):
+    background-color: rgba(255,255,255,0.02);
+  tbody tr:hover:
+    background-color: rgba(255,255,255,0.06);
+  th:
+    padding: 12px 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #94a3b8;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  td:
+    padding: 10px 6px;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+card_mod:
+  style: |
+    ha-card {
+      border-radius: 18px;
+      padding: 12px;
+      background: linear-gradient(145deg, rgba(20,20,25,0.95), rgba(35,35,45,0.90));
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+columns:
+  - name: Mag
+    data: history
+    align: center
+    modify: |
+      var m = parseFloat(x.magnitude);
+      var color = m >= 6.0 ? '#ef4444' : (m >= 4.5 ? '#f59e0b' : '#10b981');
+      `&lt;div style="background:${color}15; color:${color}; padding:4px 0px; border-radius:8px; font-weight:800; font-size:16px; border: 1px solid ${color}40; min-width:45px; display:inline-block; text-shadow: 0 0 8px ${color}40;"&gt;${m.toFixed(1)}&lt;/div&gt;`
+  - name: Location & Type
+    data: history
+    modify: |
+      ` &lt;div style="line-height:1.4;"&gt;
+        &lt;div style="font-weight:700; font-size:14px; color:#f1f5f9;"&gt;${x.location}&lt;/div&gt;
+        &lt;div style="margin-top:4px;"&gt;
+          &lt;span style="background:rgba(255,255,255,0.08); color:#cbd5e1; padding:2px 8px; border-radius:12px; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em;"&gt;${x.event_type || "Unknown"}&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt; `
+  - name: Telemetry
+    data: history
+    modify: |
+      ` &lt;div style="line-height:1.5;"&gt;
+        &lt;div style="font-size:12px; color:#38bdf8; font-weight:600;"&gt;📉 ${x.depth_km ? x.depth_km.toFixed(1) + " km" : "Surface"}&lt;/div&gt;
+        &lt;div style="font-size:11px; color:#64748b; margin-top:2px;"&gt;⏱️ ${x.time ? x.time.replace(' UTC', '') : "N/A"}&lt;/div&gt;
+      &lt;/div&gt; `
+  - name: Warning
+    data: history
+    align: center
+    modify: |
+      var alertHtml = "";
+      if (x.alert_level && x.alert_level !== "None") {
+        var al = x.alert_level.toLowerCase();
+        var bg, txt, border;
+        if (al === "red") { bg = "#7f1d1d"; txt = "#fca5a5"; border = "#ef4444"; }
+        else if (al === "orange") { bg = "#7c2d12"; txt = "#fdba74"; border = "#f97316"; }
+        else if (al === "yellow") { bg = "#713f12"; txt = "#fef08a"; border = "#eab308"; }
+        else { bg = "#14532d"; txt = "#86efac"; border = "#22c55e"; }
+        alertHtml = `&lt;div style="background:${bg}; color:${txt}; border:1px solid ${border}60; padding:3px 8px; border-radius:12px; font-size:10px; font-weight:800; letter-spacing:0.05em; display:inline-block;"&gt;${x.alert_level.toUpperCase()}&lt;/div&gt;`;
+      }
+      var tsuHtml = x.tsunami_warning ? `&lt;div style="background:#7f1d1d; color:#fca5a5; border:1px solid #ef444460; padding:3px 8px; border-radius:12px; font-size:10px; font-weight:800; margin-top:4px; display:inline-block; letter-spacing:0.05em;"&gt;🌊 TSUNAMI&lt;/div&gt;` : "";
+      (alertHtml || tsuHtml) ? `&lt;div style="display:flex; flex-direction:column; gap:4px; align-items:center;"&gt;${alertHtml}${tsuHtml}&lt;/div&gt;` : `&lt;span style="color:rgba(255,255,255,0.2); font-size:11px; font-weight:600;"&gt;NO ALERT&lt;/span&gt;`</code></pre>
+        </div>
+    </section>
+
+    <footer class="animate-on-scroll">
+        <h2>🤝 Credits</h2>
+        <p>A massive thank you to the United States Geological Survey (USGS) for providing open-access, real-time seismic telemetry to the public.</p>
+    </footer>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Stop observing once it has become visible
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach((element) => {
+            observer.observe(element);
+        });
+    });
+</script>
+
+</body>
+</html>
