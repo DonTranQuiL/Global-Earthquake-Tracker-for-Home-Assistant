@@ -22,7 +22,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install AI Engineer Dependencies
-        run: pip install requests opena
+        run: pip install requests openai
 
       - name: Run Feed Watcher Agent
         id: watcher
