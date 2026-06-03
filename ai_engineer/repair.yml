@@ -1,0 +1,72 @@
+import os
+import json
+from openai import OpenAI
+
+# 1. Read the failed logs
+try:
+    with open("failed_logs.txt", "r") as f:
+        # We only grab the last 3000 characters where the actual crash/error usually is
+        logs = f.read()[-3000:] 
+except FileNotFoundError:
+    print("No logs found. Exiting.")
+    exit(0)
+
+if not logs.strip():
+    print("Logs are empty. Exiting.")
+    exit(0)
+
+# 2. Engage OpenRouter
+api_key = os.getenv("OPENROUTER_API_KEY")
+if not api_key:
+    print("No API key found. Exiting.")
+    exit(0)
+
+client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=api_key,
+)
+
+prompt = f"""
+You are an AI Staff Engineer. The CI testing pipeline just failed for a Home Assistant integration.
+Here are the tail ends of the error logs:
+
+{logs}
+
+Identify the Python file that caused the error, and write the FULL, corrected code for that file to fix the bug.
+Return ONLY valid JSON in this exact format. Do not include markdown formatting or explanations.
+{{
+    "file_path": "path/to/broken_file.py",
+    "new_code": "the complete fixed python code"
+}}
+"""
+
+print("Analyzing logs and generating fix...")
+try:
+    completion = client.chat.completions.create(
+        model="meta-llama/llama-3-8b-instruct:free",
+        messages=[{"role": "user", "content": prompt}]
+    )
+    
+    response_text = completion.choices[0].message.content.strip()
+    
+    # Strip markdown if the AI accidentally included it
+    if response_text.startswith("```json"):
+        response_text = response_text[7:-3]
+    elif response_text.startswith("```"):
+        response_text = response_text[3:-3]
+        
+    repair_plan = json.loads(response_text.strip())
+    
+    file_path = repair_plan.get("file_path")
+    new_code = repair_plan.get("new_code")
+    
+    # 3. Overwrite the broken file with the new code
+    if file_path and os.path.exists(file_path):
+        with open(file_path, "w") as f:
+            f.write(new_code)
+        print(f"Successfully patched {file_path}")
+    else:
+        print(f"File {file_path} not found locally or path is incorrect. Cannot apply patch.")
+        
+except Exception as e:
+    print(f"Failed to generate or apply fix: {e}")
