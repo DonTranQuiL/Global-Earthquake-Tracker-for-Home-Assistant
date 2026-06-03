@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       issues: write
-      contents: read
+      contents: write
     
     steps:
       - name: Checkout Repository
@@ -40,3 +40,11 @@ jobs:
             bug
             ai-detected
             upstream-change
+
+      - name: Save AI Memory
+        run: |
+          git config --global user.name "AI Staff Engineer"
+          git config --global user.email "secret@github.com"
+          git add .memory/
+          git commit -m "🤖 Update earthquake schema baseline" || echo "Memory is already up to date"
+          git push
