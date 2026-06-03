@@ -132,6 +132,90 @@
             margin-top: 1.5rem;
         }
 
+        /* --- Seismic Animations --- */
+        .seismograph-container {
+            width: 100%;
+            height: 60px;
+            overflow: hidden;
+            position: relative;
+            margin: 1.5rem 0 2rem 0;
+            opacity: 0.8;
+            mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+        }
+        
+        .seismograph-line {
+            width: 200%;
+            height: 100%;
+            fill: none;
+            stroke: var(--accent-blue);
+            stroke-width: 2.5;
+            animation: scroll-left 6s linear infinite;
+            filter: drop-shadow(0 0 6px var(--accent-blue));
+        }
+        
+        @keyframes scroll-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .live-marker {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            vertical-align: middle;
+            transform: translateY(-3px);
+        }
+
+        .marker-core {
+            width: 12px;
+            height: 12px;
+            background-color: #ef4444;
+            border-radius: 50%;
+            z-index: 2;
+            box-shadow: 0 0 10px #ef4444;
+        }
+
+        .marker-pulse {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(239, 68, 68, 0.6);
+            border-radius: 50%;
+            z-index: 1;
+            animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+
+        @keyframes ping {
+            75%, 100% {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes tremor {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            20% { transform: translate(-1px, 1px) rotate(-1deg); }
+            40% { transform: translate(-1px, -1px) rotate(1deg); }
+            60% { transform: translate(1px, 1px) rotate(0deg); }
+            80% { transform: translate(1px, -1px) rotate(1deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        .tremor-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .tremor-hover:hover {
+            animation: tremor 0.3s ease-in-out infinite;
+            border-color: rgba(239, 68, 68, 0.4);
+            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.2);
+        }
+
         /* --- Animations --- */
         .animate-on-scroll {
             opacity: 0;
@@ -171,9 +255,19 @@
     
     <header class="animate-on-scroll is-visible">
         <img class="hero-img" src="https://github.com/user-attachments/assets/e541c943-38d1-436f-9f42-5458d28b753e" alt="Global Earthquake Tracker Header" onerror="this.src='https://placehold.co/1024x434/0f172a/38bdf8?text=Global+Earthquake+Tracker'">
-        <h1>🌍 Global Earthquake Tracker</h1>
+        <h1>
+            <span class="live-marker"><span class="marker-pulse"></span><span class="marker-core"></span></span>
+            Global Earthquake Tracker
+        </h1>
         <p style="text-align: center; font-size: clamp(1rem, 2vw, 1.2rem); color: var(--text-main); max-width: 800px; margin: 0 auto 1.5rem auto;">The high-performance, real-time global seismic and tsunami early warning system for Home Assistant.</p>
         
+        <!-- Live Seismograph Animation -->
+        <div class="seismograph-container">
+            <svg class="seismograph-line" viewBox="0 0 1000 100" preserveAspectRatio="none">
+                <polyline points="0,50 50,50 60,10 70,90 80,20 90,80 100,50 150,50 160,30 170,70 180,40 190,60 200,50 250,50 300,50 310,10 320,90 330,20 340,80 350,50 400,50 410,30 420,70 430,40 440,60 450,50 500,50 550,50 560,10 570,90 580,20 590,80 600,50 650,50 660,30 670,70 680,40 690,60 700,50 750,50 800,50 810,10 820,90 830,20 840,80 850,50 900,50 910,30 920,70 930,40 940,60 950,50 1000,50" />
+            </svg>
+        </div>
+
         <div class="alert-box">
             <strong>⚠️ LATEST RELEASE ANNOUNCEMENT:</strong> We have successfully migrated to a <strong>Dynamic Entity Lifecycle Engine</strong>! The tracker now securely hooks into the USGS 7-Day API, utilizing dual-magnitude thresholds and zero-bloat spawning logic. Custom local map pins and Tsunami warnings are now fully supported!
         </div>
@@ -190,23 +284,26 @@
     </header>
 
     <section class="glass-panel animate-on-scroll">
-        <h3>🚨 Real-Time Seismic Intelligence</h3>
+        <h3>
+            <span class="live-marker" style="width: 16px; height: 16px; margin-right: 12px; transform: translateY(-1px);"><span class="marker-pulse"></span><span class="marker-core" style="width: 8px; height: 8px;"></span></span>
+            Real-Time Seismic Intelligence
+        </h3>
         <p>Bring ultra-fast, live earthquake and tsunami telemetry directly into Home Assistant using the official <strong>USGS Worldwide Network API</strong>. Engineered for precision, this integration filters out the noise (like quarry blasts) and delivers highly accurate, color-coded map pins for actual tectonic events anywhere on the globe.</p>
     </section>
 
     <h2 class="animate-on-scroll">🌟 Core Features & Architecture</h2>
     <div class="feature-grid">
-        <div class="glass-panel animate-on-scroll delay-1">
+        <div class="glass-panel tremor-hover animate-on-scroll delay-1">
             <h3>🎛️ Dual-Magnitude Smart Filtering</h3>
             <p>The USGS sensor network inside the USA is hyper-sensitive, capturing thousands of microscopic 1.0M rumbles, while global stations usually only guarantee detection at 4.5M. Set <strong>two independent magnitude sliders</strong>—one for the USA, and one for the Rest of the World. Filter out North American noise while maintaining a strict watch on Europe and beyond!</p>
         </div>
         
-        <div class="glass-panel animate-on-scroll delay-2">
+        <div class="glass-panel tremor-hover animate-on-scroll delay-2">
             <h3>🧹 Dynamic Zero-Bloat Lifecycle</h3>
             <p>Standard integrations spin up permanent entities, destroying your database. This component enforces a strict <strong>Dynamic Lifecycle Policy</strong>: it spawns a unique sensor only when a fresh earthquake appears. When it ages out of the 7-day feed, it applies an aggressive <code>force_remove</code>. No lingering states. Just a pristine database.</p>
         </div>
         
-        <div class="glass-panel animate-on-scroll delay-1">
+        <div class="glass-panel tremor-hover animate-on-scroll delay-1">
             <h3>🔬 Rich Scientific Telemetry</h3>
             <ul>
                 <li><strong>Tsunami Warnings:</strong> Instant boolean flags if a tsunami is generated.</li>
@@ -216,7 +313,7 @@
             </ul>
         </div>
 
-        <div class="glass-panel animate-on-scroll delay-2">
+        <div class="glass-panel tremor-hover animate-on-scroll delay-2">
             <h3>🗺️ Custom Map Icons</h3>
             <p>Prioritize your local files over standard Material Design Icons. Drop transparent <code>.png</code> files (earthquake, tsunami, volcano) inside <code>/config/custom_components/global_earthquakes/www/</code> and your Live Map will dynamically swap icons based on the disaster type!</p>
         </div>
@@ -249,8 +346,11 @@
         <h2>⚙️ Interactive Lovelace Dashboard Configurations</h2>
         <p style="margin-bottom: 2rem;">Build a complete, professional-grade seismic operations center directly inside your Lovelace dashboard using community cards.</p>
 
-        <div class="glass-panel">
-            <h3>📍 The Auto-Updating Live Map</h3>
+        <div class="glass-panel tremor-hover">
+            <h3>
+                <span class="live-marker" style="width: 16px; height: 16px; margin-right: 12px; transform: translateY(-1px);"><span class="marker-pulse"></span><span class="marker-core" style="width: 8px; height: 8px;"></span></span>
+                The Auto-Updating Live Map
+            </h3>
             <p><em>Requires auto-entities from HACS.</em> Automatically hunts down newly spawned earthquakes and drops them onto the map.</p>
             <img src="https://github.com/user-attachments/assets/f4c615d8-10ab-490c-8065-96168f19ace1" alt="Live Map Example" style="max-width: 400px; margin: 1rem auto; display: block;" onerror="this.src='https://placehold.co/379x448/1e293b/38bdf8?text=Map+Preview'">
             
