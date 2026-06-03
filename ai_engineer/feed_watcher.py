@@ -21,8 +21,8 @@ memory_file = ".memory/usgs_schema_snapshot.json"
 try:
     with open(memory_file, "r") as f:
         known_schema = json.load(f)
-except FileNotFoundError:
-    # If it's the first run, save the current schema and exit safely
+except (FileNotFoundError, json.JSONDecodeError):
+    # If it's the first run, or if the file is empty/corrupt, save the current schema
     os.makedirs(".memory", exist_ok=True)
     with open(memory_file, "w") as f:
         json.dump(live_schema_keys, f)
