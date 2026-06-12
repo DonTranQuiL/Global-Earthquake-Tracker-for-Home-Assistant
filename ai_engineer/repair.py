@@ -16,13 +16,7 @@ PROJECT_NAME = REPO.split("/")[-1].replace("-", " ").replace("_", " ").title()
 print(f"🤖 Starting AI Self-Repair Agent for {PROJECT_NAME}...")
 
 # Check for common CI log files generated during testing
-LOG_FILES = [
-    "pytest_log.txt",
-    "pytest.log",
-    "test_results.log",
-    "ruff_log.txt",
-    "error_log.txt",
-]
+LOG_FILES = ["pytest_log.txt", "pytest.log", "test_results.log", "ruff_log.txt", "error_log.txt"]
 error_log_content = ""
 found_log = None
 
@@ -44,24 +38,45 @@ if not error_log_content:
 
 print(f"🔍 Analyzing error log from: {found_log}")
 
-# Try to extract the failing file path using common python traceback patterns
+# 1. Gather all potential .py files mentioned in the logs
+candidates = []
+# Standard Python pattern -> File "path/to/file.py", line 12
+for match in re.finditer(r'File "([^"]+\.py)", line \d+', error_log_content):
+    candidates.append(match.group(1))
+# Pytest pattern -> path/to/file.py:12 (with or without trailing text)
+for match in re.finditer(r'([\w/._-]+\.py):(\d+)', error_log_content):
+    candidates.append(match.group(1))
+
+# Clean paths (remove runner environment prefixes) and verify they actually exist locally
+existing_candidates = []
+for c in candidates:
+    clean_path = c.split(f"{REPO.split('/')[-1]}/")[-1]  # Strip absolute runner paths
+    if os.path.exists(clean_path) and os.path.isfile(clean_path):
+        if "ai_engineer" not in clean_path and ".github" not in clean_path:
+            existing_candidates.append(clean_path)
+
+# De-duplicate candidate list
+existing_candidates = list(dict.fromkeys(existing_candidates))
+
+# 2. Prioritize fixing actual source files over test files
 target_file = None
-file_match = re.search(r'File "([^"]+\.py)", line \d+', error_log_content)
-if file_match:
-    target_file = file_match.group(1)
-else:
-    # Fallback to scanning for common integration/app file structures if traceback parsing is ambiguous
+if existing_candidates:
+    non_test_candidates = [c for c in existing_candidates if "test" not in c.lower()]
+    if non_test_candidates:
+        target_file = non_test_candidates[0]
+        print(f"🎯 Code file prioritized for repair: {target_file}")
+    else:
+        target_file = existing_candidates[0]
+        print(f"🎯 Test file prioritized for repair: {target_file}")
+
+# Fallback: Scan root if log parser completely failed
+if not target_file:
+    print("⚠️ Ambiguous traceback. Scanning workspace for candidate files mentioned in log...")
     for root, _, files in os.walk("."):
-        if (
-            "ai_engineer" in root
-            or ".github" in root
-            or ".git" in root
-            or "venv" in root
-        ):
+        if "ai_engineer" in root or ".github" in root or ".git" in root or "venv" in root:
             continue
         for file in files:
             if file.endswith(".py") and file != "repair.py":
-                # Look for mentions of files in the error logs
                 if file in error_log_content:
                     target_file = os.path.join(root, file)
                     break
@@ -69,12 +84,10 @@ else:
             break
 
 if not target_file or not os.path.exists(target_file):
-    print(
-        "❌ Could not identify which source file caused the failure from the log traceback."
-    )
+    print("❌ Could not safely identify which local python file to target for repair.")
     sys.exit(1)
 
-print(f"🎯 Target file identified for repair: {target_file}")
+print(f"🎯 Target file verified: {target_file}")
 
 try:
     with open(target_file, "r", encoding="utf-8") as f:
@@ -83,11 +96,11 @@ except Exception as e:
     print(f"❌ Failed to load target file {target_file}: {e}")
     sys.exit(1)
 
-# Construct a detailed prompt to instruct the model to fix the code
+# Construct prompt instructing the AI
 BACKTICKS = "`" * 3
 prompt = f"""
 You are the AI Staff Engineer for '{PROJECT_NAME}'. Your persona is Snoop Dogg.
-A unit test or quality linting check has failed on our code base, and your job is to analyze the failure, diagnose the bug, and write the corrected version of the file.
+A unit test or quality linting check has failed on our codebase. Analyze the failure, diagnose the bug in '{target_file}', and output the corrected code.
 
 Target File to Fix: {target_file}
 
@@ -102,10 +115,10 @@ Here is the error log/traceback showing why it failed:
 {BACKTICKS}
 
 CRITICAL INSTRUCTIONS:
-1. Return ONLY the fully rewritten and corrected Python code for the file.
-2. Do NOT wrap your response in triple backticks ({BACKTICKS}) or a code block. Output the raw text directly.
-3. Make sure the code is syntactically perfect, handles the error correctly, and passes the tests.
-4. Keep the code style intact.
+1. You must output the entire corrected Python file inside a single standard markdown code block starting with {BACKTICKS}python and ending with {BACKTICKS}.
+2. Do NOT write conversational explanations, comments, or raps INSIDE that code block. Keep it strictly as runnable python.
+3. You can write your smooth Snoop Dogg commentary and explanation OUTSIDE of the code block (either before or after).
+4. Keep the original style, structure, and imports of the code intact except for the specific bug fix.
 """
 
 openrouter_url = "https://openrouter.ai/api/v1/chat/completions"
@@ -126,10 +139,8 @@ delay = 1
 
 for attempt in range(max_retries):
     try:
-        print(f"Sending request to OpenRouter (Attempt {attempt + 1}/{max_retries})...")
-        response = requests.post(
-            openrouter_url, headers=headers, json=payload, timeout=45.0
-        )
+        print(f"Sending repair request to OpenRouter (Attempt {attempt + 1}/{max_retries})...")
+        response = requests.post(openrouter_url, headers=headers, json=payload, timeout=45.0)
         if response.status_code == 200:
             result = response.json()
             fixed_code = result["choices"][0]["message"]["content"].strip()
@@ -138,22 +149,39 @@ for attempt in range(max_retries):
             print(f"API Error {response.status_code}: {response.text}")
     except Exception as e:
         print(f"Attempt failed with network exception: {e}")
-
+    
     if attempt < max_retries - 1:
-        time_to_sleep = delay
-        print(f"Retrying in {time_to_sleep}s...")
+        print(f"Retrying in {delay}s...")
         import time
-
-        time.sleep(time_to_sleep)
+        time.sleep(delay)
         delay *= 2
 
 if not fixed_code:
     print("❌ Failed to get a response from OpenRouter after maximum retries.")
     sys.exit(1)
 
-# Strip code block decorators if the model returned them
+# Extract python code securely if the AI wrapped it in markdown code blocks
+match = re.search(rf"{BACKTICKS}python\s*(.*?)\s*{BACKTICKS}", fixed_code, re.DOTALL | re.IGNORECASE)
+if match:
+    fixed_code = match.group(1).strip()
+else:
+    # Fallback to general code block
+    match = re.search(rf"{BACKTICKS}\s*(.*?)\s*{BACKTICKS}", fixed_code, re.DOTALL)
+    if match:
+        fixed_code = match.group(1).strip()
+
+# Clean up remaining markdown artifacts
 pattern = rf"^{BACKTICKS}(?:python)?\n|\n{BACKTICKS}$"
 fixed_code = re.sub(pattern, "", fixed_code).strip()
+
+# ⚠️ CRITICAL UPGRADE: Python Syntax Compilation Shield
+try:
+    compile(fixed_code, target_file, 'exec')
+    print("✅ Fixed code compiled successfully! Valid python syntax verified.")
+except SyntaxError as e:
+    print(f"❌ Syntax validation FAILED on the code returned by AI: {e}")
+    print("Aborting file overwrite and PR creation to prevent broken code from being committed.")
+    sys.exit(1)
 
 try:
     with open(target_file, "w", encoding="utf-8") as f:
@@ -163,13 +191,13 @@ except Exception as e:
     print(f"❌ Failed to write repaired code to file: {e}")
     sys.exit(1)
 
-# Write the explanation for the pull request body so the workflow can use it
+# Write explanation for the Pull Request description
 pr_prompt = f"""
 You are the AI Staff Engineer for '{PROJECT_NAME}'. Your persona is Snoop Dogg.
-You just successfully fixed a test suite crash in {target_file}!
+You successfully fixed a test suite crash in {target_file}!
 
 Here was the error:
-{error_log_content[:500]}
+{error_log_content[:400]}
 
 Explain in a smooth, professional, Snoop Dogg-styled way what went wrong and how you fixed it. Keep it under 3 paragraphs.
 DO NOT use code blocks or backticks.
@@ -180,18 +208,13 @@ try:
         "model": "gpt-4o-mini",
         "messages": [{"role": "user", "content": pr_prompt}],
     }
-    response = requests.post(
-        openrouter_url, headers=headers, json=pr_payload, timeout=25.0
-    )
+    response = requests.post(openrouter_url, headers=headers, json=pr_payload, timeout=25.0)
     if response.status_code == 200:
         explanation = response.json()["choices"][0]["message"]["content"].strip()
         with open("pr_body.txt", "w", encoding="utf-8") as f:
             f.write(explanation)
         print("📝 Saved PR description metadata successfully!")
 except Exception as e:
-    # Non-blocking failure: write fallback PR description
     with open("pr_body.txt", "w", encoding="utf-8") as f:
-        f.write(
-            f"The AI Staff Engineer has applied a self-healing fix to resolve test suite failures in {target_file}."
-        )
+        f.write(f"The AI Staff Engineer has applied a self-healing fix to resolve test suite failures in {target_file}.")
     print(f"⚠️ Explanatory meta generation failed: {e}. Saved fallback description.")
