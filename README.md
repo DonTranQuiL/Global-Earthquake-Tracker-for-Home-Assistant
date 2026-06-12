@@ -214,6 +214,9 @@ columns:
       var tsuHtml = x.tsunami_warning ? `<div style="background:#7f1d1d; color:#fca5a5; border:1px solid #ef444460; padding:3px 8px; border-radius:12px; font-size:10px; font-weight:800; margin-top:4px; display:inline-block; letter-spacing:0.05em;">🌊 TSUNAMI</div>` : "";
       (alertHtml || tsuHtml) ? `<div style="display:flex; flex-direction:column; gap:4px; align-items:center;">${alertHtml}${tsuHtml}</div>` : `<span style="color:rgba(255,255,255,0.2); font-size:11px; font-weight:600;">NO ALERT</span>`
 ```
+## 🌍 The NEW JS DASHBOARD CARD NEW!!
+<img width="763" height="432" alt="sysmiccard" src="https://github.com/user-attachments/assets/416a5b32-5c63-4942-9175-9f55854b2ee4" />
+
 
 ## 🤝 Credits
 A massive thank you to the United States Geological Survey (USGS) for providing open-access, real-time seismic telemetry to the public.
