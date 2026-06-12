@@ -23,10 +23,15 @@ class GlobalEarthquakeCache:
         if os.path.exists(self.cache_path):
             try:
                 with open(self.cache_path, "r", encoding="utf-8") as f:
-                    return json.load(f)
+                    data = json.load(f)
+                    # Handles migration seamlessly if old cache was a flat list
+                    if isinstance(data, dict):
+                        return data
+                    elif isinstance(data, list):
+                        return {"live": data, "history": data[:50]}
             except Exception as e:
                 _LOGGER.error("Error loading cache: %s", e)
-        return []
+        return {"live": [], "history": []}
 
     def save_cache(self, data):
         try:

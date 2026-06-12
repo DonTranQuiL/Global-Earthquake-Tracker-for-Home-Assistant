@@ -3,6 +3,7 @@ from homeassistant.components.sensor import SensorEntity, SensorDeviceClass
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.helpers.entity import DeviceInfo, EntityCategory
 from homeassistant.core import callback
+from homeassistant.helpers import entity_registry as er
 from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
@@ -12,16 +13,15 @@ async def async_setup_entry(hass, entry, async_add_entities):
     coordinator = hass.data[DOMAIN][entry.entry_id]
     instance_name = entry.data["instance_name"]
 
-    # 1. Add the permanent, static sensors
+    # Add permanent static sensors including the zero-bloat history feed to work with the new dashboard JS card
     async_add_entities(
         [
             GlobalEarthquakeSensor(coordinator, instance_name),
             EarthquakeLastUpdateSensor(coordinator, instance_name),
+            GlobalEarthquakeHistorySensor(coordinator, instance_name),
         ]
     )
 
-    # 2. THE DYNAMIC ENTITY MANAGER
-    # This dictionary keeps track of earthquakes currently tracked by Home Assistant
     active_entities = {}
 
     @callback
@@ -30,39 +30,37 @@ async def async_setup_entry(hass, entry, async_add_entities):
         current_ids = set()
 
         if coordinator.data:
-            # Obey the user's maximum marker limit from the cogwheel
-            num_markers = entry.options.get(
-                "map_markers", entry.data.get("map_markers", 20)
-            )
+            num_markers = entry.options.get("map_markers", entry.data.get("map_markers", 20))
             top_events = coordinator.data[:num_markers]
 
             for event in top_events:
-                eq_id = event["id"]  # The unique USGS ID (e.g., us7000spqe)
+                eq_id = event["id"]
                 current_ids.add(eq_id)
 
                 if eq_id not in active_entities:
-                    # NEW EARTHQUAKE DETECTED! Spawn a dynamic entity for it.
-                    new_sensor = GlobalEarthquakeEventSensor(
-                        coordinator, instance_name, eq_id
-                    )
+                    new_sensor = GlobalEarthquakeEventSensor(coordinator, instance_name, eq_id)
                     active_entities[eq_id] = new_sensor
                     new_entities.append(new_sensor)
 
-        # Add any newly spawned entities to Home Assistant
         if new_entities:
             async_add_entities(new_entities)
 
-        # 3. CLEANUP: Check for obsolete earthquakes that fell off the list
+        # CLEANUP: Completely unregisters expired nodes to ensure no grayed-out "Unavailable" entities remain
         obsolete_ids = set(active_entities.keys()) - current_ids
         for eq_id in obsolete_ids:
             entity = active_entities.pop(eq_id)
-            # Permanently delete the entity from the Home Assistant registry
+            entity_id = entity.entity_id
+            
+            # Remove from tracking state machine
             hass.async_create_task(entity.async_remove(force_remove=True))
+            
+            # Unregister explicitly from registry storage
+            if entity_id:
+                ent_reg = er.async_get(hass)
+                if ent_reg.async_get(entity_id):
+                    ent_reg.async_remove(entity_id)
 
-    # Attach this manager to the coordinator so it runs every time data updates
     coordinator.async_add_listener(async_update_entities)
-
-    # Run it once right now to populate the initial list
     async_update_entities()
 
 
@@ -133,17 +131,34 @@ class EarthquakeLastUpdateSensor(GlobalBaseEntity):
         return getattr(self.coordinator, "last_update_success_timestamp", None)
 
 
-# --- DYNAMIC EVENT SENSOR CLASS ---
+class GlobalEarthquakeHistorySensor(GlobalBaseEntity):
+    def __init__(self, coordinator, instance_name):
+        super().__init__(coordinator, instance_name)
+        self._attr_unique_id = f"{self._device_id}_history_feed"
+        self._attr_icon = "mdi:history"
+        self._attr_name = "History Feed"
+        self._attr_native_unit_of_measurement = "events"
+
+    @property
+    def native_value(self):
+        return len(getattr(self.coordinator, "history_data", []))
+
+    @property
+    def extra_state_attributes(self):
+        return {
+            "events": getattr(self.coordinator, "history_data", [])
+        }
+
+
 class GlobalEarthquakeEventSensor(GlobalBaseEntity):
     def __init__(self, coordinator, instance_name, eq_id):
         super().__init__(coordinator, instance_name)
-        self.eq_id = eq_id  # The actual USGS ID
+        self.eq_id = eq_id
         self._attr_unique_id = f"{self._device_id}_{eq_id}"
         self._attr_icon = "mdi:map-marker-alert"
 
     @property
     def _event_data(self):
-        # Look up this specific earthquake's data in the coordinator
         if self.coordinator.data:
             for event in self.coordinator.data:
                 if event["id"] == self.eq_id:

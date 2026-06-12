@@ -2,9 +2,7 @@ import logging
 import os
 from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.components.http import (
-    StaticPathConfig,
-)  # <--- NEW IMPORT FOR HA 2024+
+from homeassistant.components.http import StaticPathConfig
 from .const import DOMAIN, PLATFORMS
 from .coordinator import GlobalEarthquakeCoordinator
 
@@ -12,10 +10,9 @@ _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    # --- NEW: REGISTER LOCAL IMAGES FOLDER (UPDATED FOR MODERN HA) ---
+    # --- REGISTER LOCAL IMAGES FOLDER ---
     local_media_path = hass.config.path(f"custom_components/{DOMAIN}/www")
     if os.path.exists(local_media_path):
-        # Using the new async method required by newer Home Assistant versions
         await hass.http.async_register_static_paths(
             [StaticPathConfig("/global_earthquakes_assets", local_media_path, True)]
         )
@@ -24,18 +21,18 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             "The 'www' folder does not exist at %s. Custom map pins will not load.",
             local_media_path,
         )
-    # -----------------------------------------
 
     coordinator = GlobalEarthquakeCoordinator(hass, entry)
-    coordinator.last_data = await hass.async_add_executor_job(
-        coordinator.cache.load_cache
-    )
+    
+    # Load structured cache containing both live and history tracks
+    cache_data = await hass.async_add_executor_job(coordinator.cache.load_cache)
+    coordinator.last_data = cache_data.get("live", [])
+    coordinator.history_data = cache_data.get("history", [])
 
     if coordinator.last_data:
+        # Instantly populates states from cache and cleanly schedules next automatic refresh interval
         coordinator.data = coordinator.last_data
-        entry.async_create_background_task(
-            hass, coordinator.async_request_refresh(), "global_eq_bg_refresh"
-        )
+        coordinator.async_set_updated_data(coordinator.last_data)
     else:
         await coordinator.async_config_entry_first_refresh()
 
@@ -48,6 +45,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     async def handle_clear_files(call: ServiceCall):
         for coord in hass.data[DOMAIN].values():
             await hass.async_add_executor_job(coord.cache.clear_cache)
+            coord.history_data = []  # Drop in-memory history
             if hasattr(coord, "clear_debug_file"):
                 await hass.async_add_executor_job(coord.clear_debug_file)
 
@@ -55,7 +53,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.services.async_register(DOMAIN, "clear_files", handle_clear_files)
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-    entry.async_on_unload(entry.add_update_listener(update_listener))
+    entry.add_update_listener(update_listener)
     return True
 
 
