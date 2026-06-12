@@ -16,7 +16,13 @@ PROJECT_NAME = REPO.split("/")[-1].replace("-", " ").replace("_", " ").title()
 print(f"🤖 Starting AI Self-Repair Agent for {PROJECT_NAME}...")
 
 # Check for common CI log files generated during testing
-LOG_FILES = ["pytest_log.txt", "pytest.log", "test_results.log", "ruff_log.txt", "error_log.txt"]
+LOG_FILES = [
+    "pytest_log.txt",
+    "pytest.log",
+    "test_results.log",
+    "ruff_log.txt",
+    "error_log.txt",
+]
 error_log_content = ""
 found_log = None
 
@@ -44,7 +50,7 @@ candidates = []
 for match in re.finditer(r'File "([^"]+\.py)", line \d+', error_log_content):
     candidates.append(match.group(1))
 # Pytest pattern -> path/to/file.py:12 (with or without trailing text)
-for match in re.finditer(r'([\w/._-]+\.py):(\d+)', error_log_content):
+for match in re.finditer(r"([\w/._-]+\.py):(\d+)", error_log_content):
     candidates.append(match.group(1))
 
 # Clean paths (remove runner environment prefixes) and verify they actually exist locally
@@ -71,9 +77,16 @@ if existing_candidates:
 
 # Fallback: Scan root if log parser completely failed
 if not target_file:
-    print("⚠️ Ambiguous traceback. Scanning workspace for candidate files mentioned in log...")
+    print(
+        "⚠️ Ambiguous traceback. Scanning workspace for candidate files mentioned in log..."
+    )
     for root, _, files in os.walk("."):
-        if "ai_engineer" in root or ".github" in root or ".git" in root or "venv" in root:
+        if (
+            "ai_engineer" in root
+            or ".github" in root
+            or ".git" in root
+            or "venv" in root
+        ):
             continue
         for file in files:
             if file.endswith(".py") and file != "repair.py":
@@ -139,8 +152,12 @@ delay = 1
 
 for attempt in range(max_retries):
     try:
-        print(f"Sending repair request to OpenRouter (Attempt {attempt + 1}/{max_retries})...")
-        response = requests.post(openrouter_url, headers=headers, json=payload, timeout=45.0)
+        print(
+            f"Sending repair request to OpenRouter (Attempt {attempt + 1}/{max_retries})..."
+        )
+        response = requests.post(
+            openrouter_url, headers=headers, json=payload, timeout=45.0
+        )
         if response.status_code == 200:
             result = response.json()
             fixed_code = result["choices"][0]["message"]["content"].strip()
@@ -149,10 +166,11 @@ for attempt in range(max_retries):
             print(f"API Error {response.status_code}: {response.text}")
     except Exception as e:
         print(f"Attempt failed with network exception: {e}")
-    
+
     if attempt < max_retries - 1:
         print(f"Retrying in {delay}s...")
         import time
+
         time.sleep(delay)
         delay *= 2
 
@@ -161,7 +179,9 @@ if not fixed_code:
     sys.exit(1)
 
 # Extract python code securely if the AI wrapped it in markdown code blocks
-match = re.search(rf"{BACKTICKS}python\s*(.*?)\s*{BACKTICKS}", fixed_code, re.DOTALL | re.IGNORECASE)
+match = re.search(
+    rf"{BACKTICKS}python\s*(.*?)\s*{BACKTICKS}", fixed_code, re.DOTALL | re.IGNORECASE
+)
 if match:
     fixed_code = match.group(1).strip()
 else:
@@ -176,11 +196,13 @@ fixed_code = re.sub(pattern, "", fixed_code).strip()
 
 # ⚠️ CRITICAL UPGRADE: Python Syntax Compilation Shield
 try:
-    compile(fixed_code, target_file, 'exec')
+    compile(fixed_code, target_file, "exec")
     print("✅ Fixed code compiled successfully! Valid python syntax verified.")
 except SyntaxError as e:
     print(f"❌ Syntax validation FAILED on the code returned by AI: {e}")
-    print("Aborting file overwrite and PR creation to prevent broken code from being committed.")
+    print(
+        "Aborting file overwrite and PR creation to prevent broken code from being committed."
+    )
     sys.exit(1)
 
 try:
@@ -208,7 +230,9 @@ try:
         "model": "gpt-4o-mini",
         "messages": [{"role": "user", "content": pr_prompt}],
     }
-    response = requests.post(openrouter_url, headers=headers, json=pr_payload, timeout=25.0)
+    response = requests.post(
+        openrouter_url, headers=headers, json=pr_payload, timeout=25.0
+    )
     if response.status_code == 200:
         explanation = response.json()["choices"][0]["message"]["content"].strip()
         with open("pr_body.txt", "w", encoding="utf-8") as f:
@@ -216,5 +240,7 @@ try:
         print("📝 Saved PR description metadata successfully!")
 except Exception as e:
     with open("pr_body.txt", "w", encoding="utf-8") as f:
-        f.write(f"The AI Staff Engineer has applied a self-healing fix to resolve test suite failures in {target_file}.")
+        f.write(
+            f"The AI Staff Engineer has applied a self-healing fix to resolve test suite failures in {target_file}."
+        )
     print(f"⚠️ Explanatory meta generation failed: {e}. Saved fallback description.")
