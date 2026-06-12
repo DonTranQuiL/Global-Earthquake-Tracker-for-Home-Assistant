@@ -1,0 +1,465 @@
+pytest	Run Pytest and generate coverage	﻿2026-06-12T20:41:22.5892513Z ##[group]Run pytest tests/ -v --cov=custom_components/ --cov-report=xml
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:22.5893072Z ^[[36;1mpytest tests/ -v --cov=custom_components/ --cov-report=xml^[[0m
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:22.5930132Z shell: /usr/bin/bash -e {0}
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:22.5930418Z env:
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:22.5930728Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.13/x64
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:22.5931202Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib/pkgconfig
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:22.5931643Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:22.5932053Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:22.5932442Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:22.5932831Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:22.5933163Z ##[endgroup]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:26.5342848Z ============================= test session starts ==============================
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:26.5344286Z platform linux -- Python 3.13.13, pytest-9.0.0, pluggy-1.6.0 -- /opt/hostedtoolcache/Python/3.13.13/x64/bin/python
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:26.5346966Z cachedir: .pytest_cache
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:26.5347551Z rootdir: /home/runner/work/Global-Earthquake-Tracker-for-Home-Assistant/Global-Earthquake-Tracker-for-Home-Assistant
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:26.5348133Z configfile: pytest.ini
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:26.5349203Z plugins: sugar-1.0.0, socket-0.7.0, homeassistant-custom-component-0.13.316, aiohttp-1.1.0, github-actions-annotate-failures-0.3.0, timeout-2.4.0, pytest_freezer-0.4.9, picked-0.5.1, anyio-4.13.0, xdist-3.8.0, respx-0.22.0, requests-mock-1.12.1, asyncio-1.3.0, cov-7.0.0, syrupy-5.0.0, unordered-0.7.0
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:26.5351000Z asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:26.6554736Z collecting ... collected 15 items
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:26.6555176Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:26.8070722Z ##[error]test_cache_management
+pytest	Run Pytest and generate coverage	
+pytest	Run Pytest and generate coverage	AssertionError: assert {'history': [], 'live': []} == []
+pytest	Run Pytest and generate coverage	  
+pytest	Run Pytest and generate coverage	  Full diff:
+pytest	Run Pytest and generate coverage	  - []
+pytest	Run Pytest and generate coverage	  + {
+pytest	Run Pytest and generate coverage	  +     'history': [],
+pytest	Run Pytest and generate coverage	  +     'live': [],
+pytest	Run Pytest and generate coverage	  + }
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:26.8127679Z tests/test_cache.py::test_cache_management FAILED                        [  6%]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:26.8509626Z tests/test_config_flow.py::test_form_user_success PASSED                 [ 13%]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:26.8749631Z tests/test_config_flow.py::test_options_flow PASSED                      [ 20%]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:26.8982635Z tests/test_coordinator.py::test_coordinator_successful_refresh PASSED    [ 26%]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:26.9197153Z tests/test_coordinator.py::test_coordinator_filtering_logic PASSED       [ 33%]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:26.9395080Z tests/test_coordinator.py::test_coordinator_exception_handling PASSED    [ 40%]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:26.9650023Z ##[error]test_setup_entry_no_cache
+pytest	Run Pytest and generate coverage	
+pytest	Run Pytest and generate coverage	AttributeError: 'list' object has no attribute 'get'
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:26.9692497Z tests/test_init.py::test_setup_entry_no_cache FAILED                     [ 46%]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:26.9923663Z ##[error]test_setup_entry_with_cache
+pytest	Run Pytest and generate coverage	
+pytest	Run Pytest and generate coverage	AttributeError: 'list' object has no attribute 'get'
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:26.9965981Z tests/test_init.py::test_setup_entry_with_cache FAILED                   [ 53%]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.0199839Z ##[error]test_unload_and_services
+pytest	Run Pytest and generate coverage	
+pytest	Run Pytest and generate coverage	AttributeError: 'list' object has no attribute 'get'
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.0244766Z tests/test_init.py::test_unload_and_services FAILED                      [ 60%]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.0733975Z tests/test_integration.py::test_config_flow_success PASSED               [ 66%]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.0965040Z tests/test_integration.py::test_options_flow_update PASSED               [ 73%]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.1237999Z ##[error]test_coordinator_and_dynamic_sensors
+pytest	Run Pytest and generate coverage	
+pytest	Run Pytest and generate coverage	assert False
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.1297542Z tests/test_integration.py::test_coordinator_and_dynamic_sensors FAILED   [ 80%]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.1488333Z tests/test_sensor.py::test_static_sensors PASSED                         [ 86%]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.1657639Z tests/test_sensor.py::test_dynamic_event_sensor PASSED                   [ 93%]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2375293Z tests/test_sensor.py::test_async_setup_entry_manager PASSED              [100%]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2375956Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2376204Z =================================== FAILURES ===================================
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2376939Z ____________________________ test_cache_management _____________________________
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2377426Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2377605Z     def test_cache_management():
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2378056Z         hass = MagicMock()
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2378551Z         cache = GlobalEarthquakeCache(hass, "Test Instance")
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2379113Z     
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2379481Z         assert "test_instance" in cache.cache_path
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2379973Z     
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2380286Z         # 1. Load missing cache
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2380792Z         with patch("os.path.exists", return_value=False):
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2381368Z >           assert cache.load_cache() == []
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2381962Z E           AssertionError: assert {'history': [], 'live': []} == []
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2382545Z E             
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2382876Z E             Full diff:
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2383248Z E             - []
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2383584Z E             + {
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2383925Z E             +     'history': [],
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2384347Z E             +     'live': [],
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2384890Z E             + }
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2385087Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2385269Z tests/test_cache.py:14: AssertionError
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2385875Z ---------------------------- Captured stderr setup -----------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2386917Z DEBUG:asyncio:Using selector: EpollSelector
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2387432Z DEBUG:asyncio:Using selector: EpollSelector
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2387940Z DEBUG:asyncio:Using selector: EpollSelector
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2388697Z DEBUG:homeassistant.helpers.restore_state:Not creating cache - no saved states found
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2389661Z ------------------------------ Captured log setup ------------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2390444Z DEBUG    asyncio:selector_events.py:64 Using selector: EpollSelector
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2391204Z DEBUG    asyncio:selector_events.py:64 Using selector: EpollSelector
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2391961Z DEBUG    asyncio:selector_events.py:64 Using selector: EpollSelector
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2392982Z DEBUG    homeassistant.helpers.restore_state:restore_state.py:147 Not creating cache - no saved states found
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2394028Z --------------------------- Captured stderr teardown ---------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2395014Z DEBUG:homeassistant.core:Bus:Handling <Event homeassistant_stop[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2395853Z DEBUG:homeassistant.core:Bus:Handling <Event homeassistant_final_write[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2396701Z DEBUG:homeassistant.core:Bus:Handling <Event homeassistant_close[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2397483Z ---------------------------- Captured log teardown -----------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2398322Z DEBUG    homeassistant.core:core.py:1510 Bus:Handling <Event homeassistant_stop[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2399273Z DEBUG    homeassistant.core:core.py:1510 Bus:Handling <Event homeassistant_final_write[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2400238Z DEBUG    homeassistant.core:core.py:1510 Bus:Handling <Event homeassistant_close[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2401086Z __________________________ test_setup_entry_no_cache ___________________________
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2401550Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2401715Z hass = <HomeAssistant RUNNING>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2402762Z mock_coordinator_deps = (<MagicMock name='GlobalEarthquakeCache()' id='140636226466016'>, <MagicMock name='GlobalEarthquakeCoordinator()' id='140636226460976'>)
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2403760Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2403922Z     @pytest.mark.asyncio
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2404712Z     async def test_setup_entry_no_cache(hass: HomeAssistant, mock_coordinator_deps):
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2405466Z         mock_cache, mock_coord = mock_coordinator_deps
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2406153Z         entry = MockConfigEntry(domain=DOMAIN, data={"instance_name": "Test"})
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2407222Z         entry.add_to_hass(hass)
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2407596Z     
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2407899Z         hass.http = AsyncMock()
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2408260Z         with (
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2408560Z             patch(
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2409105Z                 "homeassistant.config_entries.ConfigEntries.async_forward_entry_setups",
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2409719Z                 return_value=True,
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2410068Z             ),
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2410413Z             patch("os.path.exists", return_value=True),
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2410830Z         ):
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2411176Z >           assert await async_setup_entry(hass, entry) is True
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2411651Z                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2411933Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2412066Z tests/test_init.py:59: 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2412469Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2412851Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2412998Z hass = <HomeAssistant RUNNING>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2414048Z entry = <ConfigEntry entry_id=01KTYS2X5A6MXPN9SQGC68RWQ1 version=1 domain=global_earthquakes title=Mock Title state=ConfigEntryState.NOT_LOADED unique_id=None>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2415237Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2415622Z     async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2416309Z         # --- REGISTER LOCAL IMAGES FOLDER ---
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2416925Z         local_media_path = hass.config.path(f"custom_components/{DOMAIN}/www")
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2417799Z         if os.path.exists(local_media_path):
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2418315Z             await hass.http.async_register_static_paths(
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2419003Z                 [StaticPathConfig("/global_earthquakes_assets", local_media_path, True)]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2419637Z             )
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2419928Z         else:
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2420237Z             _LOGGER.warning(
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2420826Z                 "The 'www' folder does not exist at %s. Custom map pins will not load.",
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2421441Z                 local_media_path,
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2421847Z             )
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2422139Z     
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2422532Z         coordinator = GlobalEarthquakeCoordinator(hass, entry)
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2423063Z     
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2423506Z         # Load structured cache containing both live and history tracks
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2424331Z         cache_data = await hass.async_add_executor_job(coordinator.cache.load_cache)
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2425296Z >       coordinator.last_data = cache_data.get("live", [])
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2425847Z                                 ^^^^^^^^^^^^^^
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2426411Z E       AttributeError: 'list' object has no attribute 'get'
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2426789Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2427081Z custom_components/global_earthquakes/__init__.py:29: AttributeError
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2427806Z ---------------------------- Captured stderr setup -----------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2428440Z DEBUG:asyncio:Using selector: EpollSelector
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2429082Z DEBUG:homeassistant.helpers.restore_state:Not creating cache - no saved states found
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2429914Z ------------------------------ Captured log setup ------------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2430725Z DEBUG    asyncio:selector_events.py:64 Using selector: EpollSelector
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2431691Z DEBUG    homeassistant.helpers.restore_state:restore_state.py:147 Not creating cache - no saved states found
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2432754Z --------------------------- Captured stderr teardown ---------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2433561Z DEBUG:homeassistant.core:Bus:Handling <Event homeassistant_stop[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2434598Z DEBUG:homeassistant.core:Bus:Handling <Event homeassistant_final_write[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2435388Z DEBUG:homeassistant.core:Bus:Handling <Event homeassistant_close[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2436355Z ---------------------------- Captured log teardown -----------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2437116Z DEBUG    homeassistant.core:core.py:1510 Bus:Handling <Event homeassistant_stop[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2438055Z DEBUG    homeassistant.core:core.py:1510 Bus:Handling <Event homeassistant_final_write[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2439004Z DEBUG    homeassistant.core:core.py:1510 Bus:Handling <Event homeassistant_close[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2439847Z _________________________ test_setup_entry_with_cache __________________________
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2440324Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2440486Z hass = <HomeAssistant RUNNING>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2441591Z mock_coordinator_deps = (<MagicMock name='GlobalEarthquakeCache()' id='140636261170688'>, <MagicMock name='GlobalEarthquakeCoordinator()' id='140636226459968'>)
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2442597Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2442762Z     @pytest.mark.asyncio
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2443404Z     async def test_setup_entry_with_cache(hass: HomeAssistant, mock_coordinator_deps):
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2444195Z         mock_cache, mock_coord = mock_coordinator_deps
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2445015Z         mock_cache.load_cache.return_value = [{"id": "eq1", "magnitude": 5.0}]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2445726Z         mock_coord.last_data = mock_cache.load_cache.return_value
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2446289Z     
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2446791Z         entry = MockConfigEntry(domain=DOMAIN, data={"instance_name": "Test"})
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2447452Z         entry.add_to_hass(hass)
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2447839Z     
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2448340Z         hass.http = AsyncMock()
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2448743Z         with patch(
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2449345Z             "homeassistant.config_entries.ConfigEntries.async_forward_entry_setups",
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2450064Z             return_value=True,
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2450462Z         ):
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2450870Z >           assert await async_setup_entry(hass, entry) is True
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2451398Z                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2451694Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2451827Z tests/test_init.py:78: 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2452285Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2452698Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2452836Z hass = <HomeAssistant RUNNING>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2453895Z entry = <ConfigEntry entry_id=01KTYS2X66W0C3TKVEJ8HFKKVA version=1 domain=global_earthquakes title=Mock Title state=ConfigEntryState.NOT_LOADED unique_id=None>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2455108Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2455503Z     async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2456225Z         # --- REGISTER LOCAL IMAGES FOLDER ---
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2456895Z         local_media_path = hass.config.path(f"custom_components/{DOMAIN}/www")
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2457610Z         if os.path.exists(local_media_path):
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2458167Z             await hass.http.async_register_static_paths(
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2458927Z                 [StaticPathConfig("/global_earthquakes_assets", local_media_path, True)]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2459575Z             )
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2459857Z         else:
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2460164Z             _LOGGER.warning(
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2460876Z                 "The 'www' folder does not exist at %s. Custom map pins will not load.",
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2461439Z                 local_media_path,
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2461809Z             )
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2462119Z     
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2462556Z         coordinator = GlobalEarthquakeCoordinator(hass, entry)
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2463117Z     
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2463580Z         # Load structured cache containing both live and history tracks
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2464557Z         cache_data = await hass.async_add_executor_job(coordinator.cache.load_cache)
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2465333Z >       coordinator.last_data = cache_data.get("live", [])
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2465880Z                                 ^^^^^^^^^^^^^^
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2466438Z E       AttributeError: 'list' object has no attribute 'get'
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2467045Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2467360Z custom_components/global_earthquakes/__init__.py:29: AttributeError
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2468061Z ---------------------------- Captured stderr setup -----------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2468698Z DEBUG:asyncio:Using selector: EpollSelector
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2469401Z DEBUG:homeassistant.helpers.restore_state:Not creating cache - no saved states found
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2470254Z ------------------------------ Captured log setup ------------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2471057Z DEBUG    asyncio:selector_events.py:64 Using selector: EpollSelector
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2472086Z DEBUG    homeassistant.helpers.restore_state:restore_state.py:147 Not creating cache - no saved states found
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2473122Z ----------------------------- Captured stderr call -----------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2475404Z WARNING:custom_components.global_earthquakes:The 'www' folder does not exist at /opt/hostedtoolcache/Python/3.13.13/x64/lib/python3.13/site-packages/pytest_homeassistant_custom_component/testing_config/custom_components/global_earthquakes/www. Custom map pins will not load.
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2477298Z ------------------------------ Captured log call -------------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2479203Z WARNING  custom_components.global_earthquakes:__init__.py:20 The 'www' folder does not exist at /opt/hostedtoolcache/Python/3.13.13/x64/lib/python3.13/site-packages/pytest_homeassistant_custom_component/testing_config/custom_components/global_earthquakes/www. Custom map pins will not load.
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2481323Z --------------------------- Captured stderr teardown ---------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2482083Z DEBUG:homeassistant.core:Bus:Handling <Event homeassistant_stop[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2482866Z DEBUG:homeassistant.core:Bus:Handling <Event homeassistant_final_write[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2483664Z DEBUG:homeassistant.core:Bus:Handling <Event homeassistant_close[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2484580Z ---------------------------- Captured log teardown -----------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2485407Z DEBUG    homeassistant.core:core.py:1510 Bus:Handling <Event homeassistant_stop[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2486398Z DEBUG    homeassistant.core:core.py:1510 Bus:Handling <Event homeassistant_final_write[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2487377Z DEBUG    homeassistant.core:core.py:1510 Bus:Handling <Event homeassistant_close[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2488236Z ___________________________ test_unload_and_services ___________________________
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2488726Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2488897Z hass = <HomeAssistant RUNNING>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2490082Z mock_coordinator_deps = (<MagicMock name='GlobalEarthquakeCache()' id='140636225348880'>, <MagicMock name='GlobalEarthquakeCoordinator()' id='140636225347536'>)
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2491082Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2491224Z     @pytest.mark.asyncio
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2491784Z     async def test_unload_and_services(hass: HomeAssistant, mock_coordinator_deps):
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2492534Z         mock_cache, mock_coord = mock_coordinator_deps
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2493137Z         entry = MockConfigEntry(domain=DOMAIN, data={"instance_name": "Test"})
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2493717Z         entry.add_to_hass(hass)
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2494053Z     
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2494596Z         hass.data.setdefault(DOMAIN, {})[entry.entry_id] = mock_coord
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2495111Z         hass.http = AsyncMock()
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2495432Z     
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2495696Z         with patch(
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2496197Z             "homeassistant.config_entries.ConfigEntries.async_forward_entry_setups",
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2496802Z             return_value=True,
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2497131Z         ):
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2497429Z >           await async_setup_entry(hass, entry)
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2497737Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2497875Z tests/test_init.py:95: 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2498272Z _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2498833Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2498965Z hass = <HomeAssistant RUNNING>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2499903Z entry = <ConfigEntry entry_id=01KTYS2X72SREQ8X1TZYTAC9HW version=1 domain=global_earthquakes title=Mock Title state=ConfigEntryState.NOT_LOADED unique_id=None>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2500766Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2501084Z     async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2501680Z         # --- REGISTER LOCAL IMAGES FOLDER ---
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2502253Z         local_media_path = hass.config.path(f"custom_components/{DOMAIN}/www")
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2502823Z         if os.path.exists(local_media_path):
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2503274Z             await hass.http.async_register_static_paths(
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2503887Z                 [StaticPathConfig("/global_earthquakes_assets", local_media_path, True)]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2504661Z             )
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2504943Z         else:
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2505232Z             _LOGGER.warning(
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2505737Z                 "The 'www' folder does not exist at %s. Custom map pins will not load.",
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2506301Z                 local_media_path,
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2506679Z             )
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2506937Z     
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2507319Z         coordinator = GlobalEarthquakeCoordinator(hass, entry)
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2507824Z     
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2508284Z         # Load structured cache containing both live and history tracks
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2509308Z         cache_data = await hass.async_add_executor_job(coordinator.cache.load_cache)
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2510084Z >       coordinator.last_data = cache_data.get("live", [])
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2510623Z                                 ^^^^^^^^^^^^^^
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2511144Z E       AttributeError: 'list' object has no attribute 'get'
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2511561Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2511883Z custom_components/global_earthquakes/__init__.py:29: AttributeError
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2512680Z ---------------------------- Captured stderr setup -----------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2513355Z DEBUG:asyncio:Using selector: EpollSelector
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2514110Z DEBUG:homeassistant.helpers.restore_state:Not creating cache - no saved states found
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2515216Z ------------------------------ Captured log setup ------------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2515902Z DEBUG    asyncio:selector_events.py:64 Using selector: EpollSelector
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2516841Z DEBUG    homeassistant.helpers.restore_state:restore_state.py:147 Not creating cache - no saved states found
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2517829Z ----------------------------- Captured stderr call -----------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2519581Z WARNING:custom_components.global_earthquakes:The 'www' folder does not exist at /opt/hostedtoolcache/Python/3.13.13/x64/lib/python3.13/site-packages/pytest_homeassistant_custom_component/testing_config/custom_components/global_earthquakes/www. Custom map pins will not load.
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2521356Z ------------------------------ Captured log call -------------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2523150Z WARNING  custom_components.global_earthquakes:__init__.py:20 The 'www' folder does not exist at /opt/hostedtoolcache/Python/3.13.13/x64/lib/python3.13/site-packages/pytest_homeassistant_custom_component/testing_config/custom_components/global_earthquakes/www. Custom map pins will not load.
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2525120Z --------------------------- Captured stderr teardown ---------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2525820Z DEBUG:homeassistant.core:Bus:Handling <Event homeassistant_stop[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2526537Z DEBUG:homeassistant.core:Bus:Handling <Event homeassistant_final_write[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2527252Z DEBUG:homeassistant.core:Bus:Handling <Event homeassistant_close[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2527927Z ---------------------------- Captured log teardown -----------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2528659Z DEBUG    homeassistant.core:core.py:1510 Bus:Handling <Event homeassistant_stop[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2529834Z DEBUG    homeassistant.core:core.py:1510 Bus:Handling <Event homeassistant_final_write[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2530686Z DEBUG    homeassistant.core:core.py:1510 Bus:Handling <Event homeassistant_close[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2531436Z _____________________ test_coordinator_and_dynamic_sensors _____________________
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2531858Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2532003Z hass = <HomeAssistant RUNNING>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2532801Z aioclient_mock = <pytest_homeassistant_custom_component.test_util.aiohttp.AiohttpClientMocker object at 0x7fe86c523a10>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2533525Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2533671Z     @pytest.mark.asyncio
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2534226Z     async def test_coordinator_and_dynamic_sensors(hass: HomeAssistant, aioclient_mock):
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2535211Z         """Test USGS data fetching, smart filtering, and dynamic sensor spawning."""
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2535810Z         entry = MockConfigEntry(
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2536188Z             domain=DOMAIN,
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2536551Z             title="Earthquakes (Global Test)",
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2536952Z             data={
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2537279Z                 CONF_INSTANCE_NAME: "Global Test",
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2537714Z                 CONF_MIN_MAG_USA: 2.5,
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2538102Z                 CONF_MIN_MAG_GLOBAL: 4.5,
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2538527Z                 CONF_MONITORED_COUNTRIES: ["ALL"],
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2538955Z                 CONF_MAP_MARKERS: 20,
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2539527Z                 CONF_SCAN_INTERVAL: 300,
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2539886Z             },
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2540182Z             entry_id="eq_live_test",
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2540538Z         )
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2540812Z         entry.add_to_hass(hass)
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2541147Z     
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2541474Z         # Mock a USGS GeoJSON response with 3 earthquakes
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2541916Z         mock_usgs_payload = {
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2542268Z             "features": [
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2542574Z                 {
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2542873Z                     "id": "eq_japan",
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2543258Z                     "properties": {
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2543615Z                         "mag": 6.1,
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2543999Z                         "place": "Tokyo, Japan",
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2544576Z                         "time": 1700000000000,
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2544989Z                         "type": "earthquake",
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2545378Z                         "tsunami": 1,
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2545764Z                         "alert": "yellow",
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2546139Z                     },
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2546520Z                     "geometry": {"coordinates": [139.0, 35.0, 10.0]},
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2546966Z                 },
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2547252Z                 {
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2547551Z                     "id": "eq_cali_large",
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2547934Z                     "properties": {
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2548305Z                         "mag": 3.5,
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2548693Z                         "place": "Los Angeles, CA",
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2549125Z                         "time": 1700000000000,
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2549535Z                         "type": "earthquake",
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2549940Z                         "tsunami": 0,
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2550293Z                     },
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2550660Z                     "geometry": {"coordinates": [-118.0, 34.0, 5.0]},
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2551115Z                 },
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2551399Z                 {
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2551881Z                     "id": "eq_cali_small",  # Should be filtered out because it is < 2.5 in the USA
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2552492Z                     "properties": {
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2552861Z                         "mag": 1.5,
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2553249Z                         "place": "San Francisco, CA",
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2553678Z                         "time": 1700000000000,
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2554254Z                         "type": "earthquake",
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2554848Z                         "tsunami": 0,
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2555146Z                     },
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2555416Z                     "geometry": {"coordinates": [-122.0, 37.0, 5.0]},
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2555724Z                 },
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2555929Z             ]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2556123Z         }
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2556315Z     
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2556516Z         aioclient_mock.get(
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2556944Z             "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson",
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2557376Z             json=mock_usgs_payload,
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2557628Z         )
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2557815Z     
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2558069Z         # Patch the cache so we don't write files during tests
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2558387Z         with (
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2558593Z             patch(
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2559037Z                 "custom_components.global_earthquakes.cache.GlobalEarthquakeCache.load_cache",
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2559517Z                 return_value=[],
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2559772Z             ),
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2559973Z             patch(
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2560335Z                 "custom_components.global_earthquakes.cache.GlobalEarthquakeCache.save_cache"
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2560753Z             ),
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2560947Z         ):
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2561239Z >           assert await hass.config_entries.async_setup(entry.entry_id)
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2561765Z E           assert False
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2561912Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2562046Z tests/test_integration.py:159: AssertionError
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2562442Z ---------------------------- Captured stderr setup -----------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2562839Z DEBUG:asyncio:Using selector: EpollSelector
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2563289Z DEBUG:homeassistant.helpers.restore_state:Not creating cache - no saved states found
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2563811Z ------------------------------ Captured log setup ------------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2564268Z DEBUG    asyncio:selector_events.py:64 Using selector: EpollSelector
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2565153Z DEBUG    homeassistant.helpers.restore_state:restore_state.py:147 Not creating cache - no saved states found
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2565756Z ----------------------------- Captured stderr call -----------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2566304Z INFO:homeassistant.loader:Loaded global_earthquakes from custom_components.global_earthquakes
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2567409Z WARNING:homeassistant.loader:We found a custom integration global_earthquakes which has not been tested by Home Assistant. This component might cause stability problems, be sure to disable it if you experience issues with Home Assistant
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2568421Z INFO:homeassistant.loader:Loaded http from homeassistant.components.http
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2568993Z DEBUG:homeassistant.loader:Component http import took 0.000 seconds (loaded_executor=False)
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2569475Z INFO:homeassistant.setup:Setting up http
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2570001Z WARNING:aiohttp_fast_zlib:zlib_ng and isal are not available, falling back to zlib, performance will be degraded.
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2570999Z DEBUG:homeassistant.components.network.network:Adapters: [{'name': 'eth0', 'index': 0, 'enabled': True, 'auto': True, 'default': True, 'ipv4': [{'address': '10.10.10.10', 'network_prefix': 24}], 'ipv6': []}]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2571979Z DEBUG:homeassistant.core:Bus:Handling <Event user_added[L]: user_id=c8f390db60754332a11ba0a56247792b>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2572908Z DEBUG:pytest_homeassistant_custom_component.common:Writing data to http.auth: {'version': 1, 'minor_version': 1, 'key': 'http.auth', 'data': {'content_user': 'c8f390db60754332a11ba0a56247792b'}}
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2573756Z DEBUG:homeassistant.core:Bus:Handling <Event component_loaded[L]: component=http>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2574529Z DEBUG:homeassistant.setup:Dependency global_earthquakes will wait for dependencies dict_keys(['http'])
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2575444Z DEBUG:homeassistant.loader:Component global_earthquakes import took 0.000 seconds (loaded_executor=False)
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2576002Z INFO:homeassistant.setup:Setting up global_earthquakes
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2576570Z DEBUG:homeassistant.loader:Importing platforms for global_earthquakes executor=[] loop=['config_flow'] took 0.00s
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2577885Z WARNING:custom_components.global_earthquakes:The 'www' folder does not exist at /opt/hostedtoolcache/Python/3.13.13/x64/lib/python3.13/site-packages/pytest_homeassistant_custom_component/testing_config/custom_components/global_earthquakes/www. Custom map pins will not load.
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2579149Z ERROR:homeassistant.config_entries:Error setting up entry Earthquakes (Global Test) for global_earthquakes
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2579658Z Traceback (most recent call last):
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2585413Z   File "/opt/hostedtoolcache/Python/3.13.13/x64/lib/python3.13/site-packages/homeassistant/config_entries.py", line 762, in __async_setup_with_context
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2586265Z     result = await component.async_setup_entry(hass, self)
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2586649Z              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2587600Z   File "/home/runner/work/Global-Earthquake-Tracker-for-Home-Assistant/Global-Earthquake-Tracker-for-Home-Assistant/custom_components/global_earthquakes/__init__.py", line 29, in async_setup_entry
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2588541Z     coordinator.last_data = cache_data.get("live", [])
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2589079Z                             ^^^^^^^^^^^^^^
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2589452Z AttributeError: 'list' object has no attribute 'get'
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2589965Z DEBUG:homeassistant.core:Bus:Handling <Event component_loaded[L]: component=global_earthquakes>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2590526Z ------------------------------ Captured log call -------------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2591133Z INFO     homeassistant.loader:loader.py:784 Loaded global_earthquakes from custom_components.global_earthquakes
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2592327Z WARNING  homeassistant.loader:loader.py:700 We found a custom integration global_earthquakes which has not been tested by Home Assistant. This component might cause stability problems, be sure to disable it if you experience issues with Home Assistant
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2593426Z INFO     homeassistant.loader:loader.py:784 Loaded http from homeassistant.components.http
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2594090Z DEBUG    homeassistant.loader:loader.py:1008 Component http import took 0.000 seconds (loaded_executor=False)
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2594774Z INFO     homeassistant.setup:setup.py:393 Setting up http
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2595376Z WARNING  aiohttp_fast_zlib:__init__.py:55 zlib_ng and isal are not available, falling back to zlib, performance will be degraded.
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2596450Z DEBUG    homeassistant.components.network.network:network.py:42 Adapters: [{'name': 'eth0', 'index': 0, 'enabled': True, 'auto': True, 'default': True, 'ipv4': [{'address': '10.10.10.10', 'network_prefix': 24}], 'ipv6': []}]
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2597488Z DEBUG    homeassistant.core:core.py:1510 Bus:Handling <Event user_added[L]: user_id=c8f390db60754332a11ba0a56247792b>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2598502Z DEBUG    pytest_homeassistant_custom_component.common:common.py:1547 Writing data to http.auth: {'version': 1, 'minor_version': 1, 'key': 'http.auth', 'data': {'content_user': 'c8f390db60754332a11ba0a56247792b'}}
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2599429Z DEBUG    homeassistant.core:core.py:1510 Bus:Handling <Event component_loaded[L]: component=http>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2600127Z DEBUG    homeassistant.setup:setup.py:241 Dependency global_earthquakes will wait for dependencies dict_keys(['http'])
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2600912Z DEBUG    homeassistant.loader:loader.py:1008 Component global_earthquakes import took 0.000 seconds (loaded_executor=False)
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2601558Z INFO     homeassistant.setup:setup.py:393 Setting up global_earthquakes
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2602237Z DEBUG    homeassistant.loader:loader.py:1196 Importing platforms for global_earthquakes executor=[] loop=['config_flow'] took 0.00s
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2603794Z WARNING  custom_components.global_earthquakes:__init__.py:20 The 'www' folder does not exist at /opt/hostedtoolcache/Python/3.13.13/x64/lib/python3.13/site-packages/pytest_homeassistant_custom_component/testing_config/custom_components/global_earthquakes/www. Custom map pins will not load.
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2605408Z ERROR    homeassistant.config_entries:config_entries.py:861 Error setting up entry Earthquakes (Global Test) for global_earthquakes
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2605988Z Traceback (most recent call last):
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2606690Z   File "/opt/hostedtoolcache/Python/3.13.13/x64/lib/python3.13/site-packages/homeassistant/config_entries.py", line 762, in __async_setup_with_context
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2607401Z     result = await component.async_setup_entry(hass, self)
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2607744Z              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2608689Z   File "/home/runner/work/Global-Earthquake-Tracker-for-Home-Assistant/Global-Earthquake-Tracker-for-Home-Assistant/custom_components/global_earthquakes/__init__.py", line 29, in async_setup_entry
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2609570Z     coordinator.last_data = cache_data.get("live", [])
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2609892Z                             ^^^^^^^^^^^^^^
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2610211Z AttributeError: 'list' object has no attribute 'get'
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2610751Z DEBUG    homeassistant.core:core.py:1510 Bus:Handling <Event component_loaded[L]: component=global_earthquakes>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2611497Z --------------------------- Captured stderr teardown ---------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2611971Z DEBUG:homeassistant.core:Bus:Handling <Event homeassistant_stop[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2612463Z DEBUG:homeassistant.core:Bus:Handling <Event homeassistant_final_write[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2613486Z DEBUG:pytest_homeassistant_custom_component.common:Writing data to auth: {'version': 1, 'minor_version': 1, 'key': 'auth', 'data_func': <bound method AuthStore._data_to_save of <homeassistant.auth.auth_store.AuthStore object at 0x7fe86c4935c0>>}
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2614645Z DEBUG:homeassistant.core:Bus:Handling <Event homeassistant_close[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2615136Z ---------------------------- Captured log teardown -----------------------------
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2615642Z DEBUG    homeassistant.core:core.py:1510 Bus:Handling <Event homeassistant_stop[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2616205Z DEBUG    homeassistant.core:core.py:1510 Bus:Handling <Event homeassistant_final_write[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2617309Z DEBUG    pytest_homeassistant_custom_component.common:common.py:1547 Writing data to auth: {'version': 1, 'minor_version': 1, 'key': 'auth', 'data_func': <bound method AuthStore._data_to_save of <homeassistant.auth.auth_store.AuthStore object at 0x7fe86c4935c0>>}
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2618363Z DEBUG    homeassistant.core:core.py:1510 Bus:Handling <Event homeassistant_close[L]>
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2618835Z ================================ tests coverage ================================
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2619269Z _______________ coverage: platform linux, python 3.13.13-final-0 _______________
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2619553Z 
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2619670Z Coverage XML written to file coverage.xml
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2620029Z =========================== short test summary info ============================
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2620627Z FAILED tests/test_cache.py::test_cache_management - AssertionError: assert {'history': [], 'live': []} == []
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2621125Z   
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2621319Z   Full diff:
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2621522Z   - []
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2621713Z   + {
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2621912Z   +     'history': [],
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2622143Z   +     'live': [],
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2622359Z   + }
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2622768Z FAILED tests/test_init.py::test_setup_entry_no_cache - AttributeError: 'list' object has no attribute 'get'
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2623459Z FAILED tests/test_init.py::test_setup_entry_with_cache - AttributeError: 'list' object has no attribute 'get'
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2624472Z FAILED tests/test_init.py::test_unload_and_services - AttributeError: 'list' object has no attribute 'get'
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2625115Z FAILED tests/test_integration.py::test_coordinator_and_dynamic_sensors - assert False
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.2625604Z ========================= 5 failed, 10 passed in 0.73s =========================
+pytest	Run Pytest and generate coverage	2026-06-12T20:41:27.3187495Z ##[error]Process completed with exit code 1.
