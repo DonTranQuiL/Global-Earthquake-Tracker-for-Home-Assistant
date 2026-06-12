@@ -23,7 +23,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         )
 
     coordinator = GlobalEarthquakeCoordinator(hass, entry)
-    
+
     # Load structured cache containing both live and history tracks
     cache_data = await hass.async_add_executor_job(coordinator.cache.load_cache)
     coordinator.last_data = cache_data.get("live", [])

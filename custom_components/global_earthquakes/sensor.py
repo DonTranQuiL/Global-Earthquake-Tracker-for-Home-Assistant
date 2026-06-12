@@ -30,7 +30,9 @@ async def async_setup_entry(hass, entry, async_add_entities):
         current_ids = set()
 
         if coordinator.data:
-            num_markers = entry.options.get("map_markers", entry.data.get("map_markers", 20))
+            num_markers = entry.options.get(
+                "map_markers", entry.data.get("map_markers", 20)
+            )
             top_events = coordinator.data[:num_markers]
 
             for event in top_events:
@@ -38,7 +40,9 @@ async def async_setup_entry(hass, entry, async_add_entities):
                 current_ids.add(eq_id)
 
                 if eq_id not in active_entities:
-                    new_sensor = GlobalEarthquakeEventSensor(coordinator, instance_name, eq_id)
+                    new_sensor = GlobalEarthquakeEventSensor(
+                        coordinator, instance_name, eq_id
+                    )
                     active_entities[eq_id] = new_sensor
                     new_entities.append(new_sensor)
 
@@ -50,10 +54,10 @@ async def async_setup_entry(hass, entry, async_add_entities):
         for eq_id in obsolete_ids:
             entity = active_entities.pop(eq_id)
             entity_id = entity.entity_id
-            
+
             # Remove from tracking state machine
             hass.async_create_task(entity.async_remove(force_remove=True))
-            
+
             # Unregister explicitly from registry storage
             if entity_id:
                 ent_reg = er.async_get(hass)
@@ -145,9 +149,7 @@ class GlobalEarthquakeHistorySensor(GlobalBaseEntity):
 
     @property
     def extra_state_attributes(self):
-        return {
-            "events": getattr(self.coordinator, "history_data", [])
-        }
+        return {"events": getattr(self.coordinator, "history_data", [])}
 
 
 class GlobalEarthquakeEventSensor(GlobalBaseEntity):
