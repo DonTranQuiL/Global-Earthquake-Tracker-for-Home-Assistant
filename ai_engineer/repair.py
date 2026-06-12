@@ -16,7 +16,13 @@ PROJECT_NAME = REPO.split("/")[-1].replace("-", " ").replace("_", " ").title()
 print(f"🤖 Starting AI Self-Repair Agent for {PROJECT_NAME}...")
 
 # Check for common CI log files generated during testing
-LOG_FILES = ["pytest_log.txt", "pytest.log", "test_results.log", "ruff_log.txt", "error_log.txt"]
+LOG_FILES = [
+    "pytest_log.txt",
+    "pytest.log",
+    "test_results.log",
+    "ruff_log.txt",
+    "error_log.txt",
+]
 error_log_content = ""
 found_log = None
 
@@ -46,7 +52,12 @@ if file_match:
 else:
     # Fallback to scanning for common integration/app file structures if traceback parsing is ambiguous
     for root, _, files in os.walk("."):
-        if "ai_engineer" in root or ".github" in root or ".git" in root or "venv" in root:
+        if (
+            "ai_engineer" in root
+            or ".github" in root
+            or ".git" in root
+            or "venv" in root
+        ):
             continue
         for file in files:
             if file.endswith(".py") and file != "repair.py":
@@ -58,7 +69,9 @@ else:
             break
 
 if not target_file or not os.path.exists(target_file):
-    print("❌ Could not identify which source file caused the failure from the log traceback.")
+    print(
+        "❌ Could not identify which source file caused the failure from the log traceback."
+    )
     sys.exit(1)
 
 print(f"🎯 Target file identified for repair: {target_file}")
@@ -114,7 +127,9 @@ delay = 1
 for attempt in range(max_retries):
     try:
         print(f"Sending request to OpenRouter (Attempt {attempt + 1}/{max_retries})...")
-        response = requests.post(openrouter_url, headers=headers, json=payload, timeout=45.0)
+        response = requests.post(
+            openrouter_url, headers=headers, json=payload, timeout=45.0
+        )
         if response.status_code == 200:
             result = response.json()
             fixed_code = result["choices"][0]["message"]["content"].strip()
@@ -123,11 +138,12 @@ for attempt in range(max_retries):
             print(f"API Error {response.status_code}: {response.text}")
     except Exception as e:
         print(f"Attempt failed with network exception: {e}")
-    
+
     if attempt < max_retries - 1:
         time_to_sleep = delay
         print(f"Retrying in {time_to_sleep}s...")
         import time
+
         time.sleep(time_to_sleep)
         delay *= 2
 
@@ -164,7 +180,9 @@ try:
         "model": "gpt-4o-mini",
         "messages": [{"role": "user", "content": pr_prompt}],
     }
-    response = requests.post(openrouter_url, headers=headers, json=pr_payload, timeout=25.0)
+    response = requests.post(
+        openrouter_url, headers=headers, json=pr_payload, timeout=25.0
+    )
     if response.status_code == 200:
         explanation = response.json()["choices"][0]["message"]["content"].strip()
         with open("pr_body.txt", "w", encoding="utf-8") as f:
@@ -173,5 +191,7 @@ try:
 except Exception as e:
     # Non-blocking failure: write fallback PR description
     with open("pr_body.txt", "w", encoding="utf-8") as f:
-        f.write(f"The AI Staff Engineer has applied a self-healing fix to resolve test suite failures in {target_file}.")
+        f.write(
+            f"The AI Staff Engineer has applied a self-healing fix to resolve test suite failures in {target_file}."
+        )
     print(f"⚠️ Explanatory meta generation failed: {e}. Saved fallback description.")
