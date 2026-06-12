@@ -150,14 +150,15 @@ async def test_coordinator_and_dynamic_sensors(hass: HomeAssistant, aioclient_mo
     with (
         patch(
             "custom_components.global_earthquakes.cache.GlobalEarthquakeCache.load_cache",
-            return_value=[],
+            # FIX: Return dictionary instead of list
+            return_value={"history": [], "live": []},
         ),
         patch(
             "custom_components.global_earthquakes.cache.GlobalEarthquakeCache.save_cache"
         ),
     ):
         assert await hass.config_entries.async_setup(entry.entry_id)
-        await hass.async_block_till_done()
+
 
     # 1. Verify the Static Main Sensor
     main_sensor = hass.states.get(

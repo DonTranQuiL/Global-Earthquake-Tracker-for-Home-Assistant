@@ -1,7 +1,8 @@
+import pytest
+import os
 import json
 from unittest.mock import patch, mock_open, MagicMock
 from custom_components.global_earthquakes.cache import GlobalEarthquakeCache
-
 
 def test_cache_management():
     hass = MagicMock()
@@ -9,24 +10,20 @@ def test_cache_management():
 
     assert "test_instance" in cache.cache_path
 
-    # 1. Load missing cache
+    # 1. Load missing cache - Now expects the structured dictionary!
     with patch("os.path.exists", return_value=False):
-        assert cache.load_cache() == []
+        assert cache.load_cache() == {"history": [], "live": []}
 
     # 2. Load valid cache
-    mock_data = [{"id": "eq1"}]
-    with (
-        patch("os.path.exists", return_value=True),
-        patch("builtins.open", mock_open(read_data=json.dumps(mock_data))),
-    ):
+    mock_data = {"history": [], "live": [{"id": "eq1"}]}
+    with patch("os.path.exists", return_value=True), \
+         patch("builtins.open", mock_open(read_data=json.dumps(mock_data))):
         assert cache.load_cache() == mock_data
 
     # 3. Load corrupted cache
-    with (
-        patch("os.path.exists", return_value=True),
-        patch("builtins.open", mock_open(read_data="NOT JSON FORMAT")),
-    ):
-        assert cache.load_cache() == []
+    with patch("os.path.exists", return_value=True), \
+         patch("builtins.open", mock_open(read_data="NOT JSON FORMAT")):
+        assert cache.load_cache() == {"history": [], "live": []}
 
     # 4. Save cache
     with patch("builtins.open", mock_open()) as m_open:
