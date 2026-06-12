@@ -159,7 +159,6 @@ async def test_coordinator_and_dynamic_sensors(hass: HomeAssistant, aioclient_mo
     ):
         assert await hass.config_entries.async_setup(entry.entry_id)
 
-
     # 1. Verify the Static Main Sensor
     main_sensor = hass.states.get(
         "sensor.earthquake_tracker_global_test_latest_magnitude"
