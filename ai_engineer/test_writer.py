@@ -1,22 +1,17 @@
 import os
 from openai import OpenAI
 
-# 1. Read the diff of the merged PR
 try:
     with open("merged_diff.txt", "r") as f:
         diff_text = f.read()
 except FileNotFoundError:
-    print("No diff found. Exiting.")
     exit(0)
 
-if not diff_text.strip() or len(diff_text) < 10:
-    print("Diff is too small or empty. Exiting.")
+if len(diff_text.strip()) < 10:
     exit(0)
 
-# 2. Engage OpenRouter
 api_key = os.getenv("OPENROUTER_API_KEY")
 if not api_key:
-    print("No API key found. Exiting.")
     exit(0)
 
 client = OpenAI(
@@ -25,55 +20,61 @@ client = OpenAI(
 )
 
 prompt = f"""
-You are an AI Staff Engineer maintaining a Home Assistant integration. 
-A Pull Request was just merged. Read the diff and write ONE single, highly robust `pytest` function that covers a new edge case introduced by this code.
+You are the AI Quality Assurance Engineer for 'SkyRadar Fusion'. Your persona is Snoop Dogg.
+You make sure the code is absolutely bulletproof before it hits the streets.
 
-Your response MUST exactly follow this plain text format:
-FILEPATH: tests/test_auto_generated.py
-CODE:
-<paste the full python test code here including imports>
-
-Do not include any other text or markdown blocks.
-
-Diff:
+Here is the new code diff that needs testing:
 {diff_text}
+
+1. Write a quick intro in Snoop Dogg's voice explaining your test strategy for this code.
+2. Write comprehensive, robust `pytest` unit tests covering edge cases, standard usage, and potential failures.
+3. The tests MUST be inside a standard python code block (using triple backticks). The tests themselves must be highly professional and strictly formatted—no slang in the test assertions, just pure quality assurance.
+
+IMPORTANT INSTRUCTIONS:
+You must start your response with the exact line:
+FILEPATH: tests/test_generated.py
+Then write your Snoop intro.
+Then output the tests exactly starting with CODE: and then the python code block.
+
+Sign off your intro exactly like this:
+**By:** SnoopDogg
+**Role:** AI QA Engineer for SkyRadar Fusion
 """
 
-print("Analyzing merged code and generating test...")
 try:
     completion = client.chat.completions.create(
-        model="meta-llama/llama-3-8b-instruct:free",
-        messages=[dict(role="user", content=prompt)],
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": prompt}],
     )
 
-    response_text = completion.choices[0].message.content.strip()
-
-    # 3. Parse the custom text format
-    lines = response_text.splitlines()
+    lines = completion.choices[0].message.content.strip().splitlines()
     file_path = None
     code_lines = []
     is_code = False
 
+    # Anti-markdown-break trick
+    BACKTICKS = "`" * 3
+    PY_BACKTICKS = BACKTICKS + "python"
+
     for line in lines:
         if line.startswith("FILEPATH:"):
             file_path = line.replace("FILEPATH:", "").strip()
-        elif line.startswith("CODE:"):
+        elif line.startswith("CODE:") or line.startswith(PY_BACKTICKS):
             is_code = True
+            continue
         elif is_code:
-            # Clean up markdown if the LLM hallucinated it
-            if not line.startswith("```"):
+            if line.startswith(BACKTICKS):
+                is_code = False
+            else:
                 code_lines.append(line)
 
-    new_code = "\n".join(code_lines)
-
-    # 4. Save the new test to the disk
-    if file_path and new_code:
+    if file_path and code_lines:
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         with open(file_path, "w") as f:
-            f.write(new_code)
-        print(f"Successfully wrote new test to {file_path}")
+            f.write("\n".join(code_lines))
+        print(f"Wrote test to {file_path}")
     else:
-        print("Could not parse the LLM response correctly.")
+        print("Failed to extract FILEPATH or CODE from AI response.")
 
 except Exception as e:
-    print(f"Failed to generate test: {e}")
+    print(f"Test generation failed: {e}")
