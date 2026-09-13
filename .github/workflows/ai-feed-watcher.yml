@@ -22,14 +22,19 @@ jobs:
           python-version: "3.12"
 
       - name: Install AI Engineer Dependencies
+        if: hashFiles('ai_engineer/feed_watcher.py') != ''
         run: pip install requests openai
 
       - name: Run Feed Watcher Agent
+        if: hashFiles('ai_engineer/feed_watcher.py') != ''
         id: watcher
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: python ai_engineer/feed_watcher.py
 
+      - name: Skip when ai_engineer/feed_watcher.py absent
+        if: hashFiles('ai_engineer/feed_watcher.py') == ''
+        run: echo "ai_engineer/feed_watcher.py not present in this repo; skipping watcher"
       - name: Create Issue on Breakage
         if: env.SCHEMA_CHANGED == 'true'
         uses: peter-evans/create-issue-from-file@v6
@@ -42,6 +47,7 @@ jobs:
             upstream-change
 
       - name: Save AI Memory
+        if: hashFiles('ai_engineer/feed_watcher.py') != ''
         run: |
           git config --global user.name "AI Staff Engineer"
           git config --global user.email "secret@github.com"
