@@ -1,16 +1,17 @@
-import pytest
 from unittest.mock import patch
+
+import pytest
 from homeassistant.data_entry_flow import FlowResultType
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.global_earthquakes.const import (
-    DOMAIN,
     CONF_INSTANCE_NAME,
+    CONF_MAP_MARKERS,
+    CONF_MIN_MAG_GLOBAL,
+    CONF_MIN_MAG_USA,
     CONF_MONITORED_COUNTRIES,
     CONF_SCAN_INTERVAL,
-    CONF_MIN_MAG_USA,
-    CONF_MIN_MAG_GLOBAL,
-    CONF_MAP_MARKERS,
+    DOMAIN,
 )
 
 
