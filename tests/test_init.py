@@ -1,14 +1,15 @@
+from unittest.mock import AsyncMock, MagicMock, patch
+
 import pytest
-from unittest.mock import MagicMock, AsyncMock, patch
 from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.global_earthquakes.const import DOMAIN, PLATFORMS
 from custom_components.global_earthquakes import (
     async_setup_entry,
     async_unload_entry,
     update_listener,
 )
+from custom_components.global_earthquakes.const import DOMAIN, PLATFORMS
 
 
 @pytest.fixture(autouse=True)
@@ -44,7 +45,7 @@ def mock_coordinator_deps():
 
 @pytest.mark.asyncio
 async def test_setup_entry_no_cache(hass: HomeAssistant, mock_coordinator_deps):
-    mock_cache, mock_coord = mock_coordinator_deps
+    _mock_cache, mock_coord = mock_coordinator_deps
     entry = MockConfigEntry(domain=DOMAIN, data={"instance_name": "Test"})
     entry.add_to_hass(hass)
 

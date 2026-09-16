@@ -1,8 +1,10 @@
 import logging
 import os
-from homeassistant.core import HomeAssistant, ServiceCall
-from homeassistant.config_entries import ConfigEntry
+
 from homeassistant.components.http import StaticPathConfig
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant, ServiceCall
+
 from .const import DOMAIN, PLATFORMS
 from .coordinator import GlobalEarthquakeCoordinator
 
