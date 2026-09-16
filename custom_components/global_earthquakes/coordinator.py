@@ -175,9 +175,7 @@ class GlobalEarthquakeCoordinator(DataUpdateCoordinator):
                             "latitude": coordinates[1],
                             "longitude": coordinates[0],
                             "event_type": props.get("type", "unknown").capitalize(),
-                            "tsunami_warning": True
-                            if props.get("tsunami", 0) == 1
-                            else False,
+                            "tsunami_warning": props.get("tsunami", 0) == 1,
                             "alert_level": props.get("alert").capitalize()
                             if props.get("alert")
                             else "None",

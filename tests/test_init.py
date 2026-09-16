@@ -44,7 +44,7 @@ def mock_coordinator_deps():
 
 @pytest.mark.asyncio
 async def test_setup_entry_no_cache(hass: HomeAssistant, mock_coordinator_deps):
-    mock_cache, mock_coord = mock_coordinator_deps
+    _mock_cache, mock_coord = mock_coordinator_deps
     entry = MockConfigEntry(domain=DOMAIN, data={"instance_name": "Test"})
     entry.add_to_hass(hass)
 
