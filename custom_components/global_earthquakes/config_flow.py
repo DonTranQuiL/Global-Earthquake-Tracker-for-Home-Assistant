@@ -1,4 +1,5 @@
 import logging
+
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.core import callback
@@ -6,17 +7,17 @@ from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers import selector
 
 from .const import (
-    DOMAIN,
     CONF_INSTANCE_NAME,
+    CONF_MAP_MARKERS,
+    CONF_MIN_MAG_GLOBAL,
+    CONF_MIN_MAG_USA,
     CONF_MONITORED_COUNTRIES,
     CONF_SCAN_INTERVAL,
-    CONF_MIN_MAG_USA,
-    CONF_MIN_MAG_GLOBAL,
-    CONF_MAP_MARKERS,
-    DEFAULT_SCAN_INTERVAL,
-    DEFAULT_MIN_MAG_USA,
-    DEFAULT_MIN_MAG_GLOBAL,
     DEFAULT_MAP_MARKERS,
+    DEFAULT_MIN_MAG_GLOBAL,
+    DEFAULT_MIN_MAG_USA,
+    DEFAULT_SCAN_INTERVAL,
+    DOMAIN,
 )
 
 _LOGGER = logging.getLogger(__name__)

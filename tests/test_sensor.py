@@ -1,13 +1,14 @@
-import pytest
 from unittest.mock import MagicMock
+
+import pytest
 from homeassistant.const import EntityCategory
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.global_earthquakes.const import DOMAIN
 from custom_components.global_earthquakes.sensor import (
-    GlobalEarthquakeSensor,
     EarthquakeLastUpdateSensor,
     GlobalEarthquakeEventSensor,
+    GlobalEarthquakeSensor,
     async_setup_entry,
 )
 
