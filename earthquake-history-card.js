@@ -57,7 +57,7 @@ class EarthquakeHistoryCard extends HTMLElement {
           overflow: hidden;
         }
 
-        /* --- COMMAND CENTER ICON HEADER PRO BLOCK --- */
+        /* --- HEADER & STATS --- */
         .header-container {
           display: flex;
           justify-content: space-between;
@@ -102,7 +102,6 @@ class EarthquakeHistoryCard extends HTMLElement {
           font-weight: 800;
           letter-spacing: 0.75px;
           text-transform: uppercase;
-          color: var(--text-main);
           background: linear-gradient(125deg, #ffffff 60%, #a5b4fc);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -145,12 +144,12 @@ class EarthquakeHistoryCard extends HTMLElement {
           box-shadow: 0 0 10px rgba(231, 76, 60, 0.15);
         }
 
-        /* --- EVENT LIST CONTAINERS --- */
+        /* --- EVENTS LIST & SCROLL CONTAINER --- */
         .events-list {
           display: flex;
           flex-direction: column;
           gap: 12px;
-          max-height: 450px;
+          max-height: 480px;
           overflow-y: auto;
           padding-right: 6px;
         }
@@ -158,12 +157,21 @@ class EarthquakeHistoryCard extends HTMLElement {
         .events-list::-webkit-scrollbar {
           width: 6px;
         }
-        .events-list::-webkit-scrollbar-thumb {
-          background: var(--panel-bg);
+        .events-list::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0.2);
           border-radius: 4px;
         }
+        .events-list::-webkit-scrollbar-thumb {
+          background: rgba(0, 188, 212, 0.3);
+          border-radius: 4px;
+        }
+        .events-list::-webkit-scrollbar-thumb:hover {
+          background: rgba(0, 188, 212, 0.6);
+        }
 
+        /* --- EVENT ITEM (FIXED WITH FLEX-SHRINK: 0) --- */
         .event-item {
+          flex-shrink: 0; /* Prevents card squashing when list exceeds container height */
           background: var(--panel-bg);
           border-radius: 12px;
           border: 1px solid rgba(255,255,255,0.03);
@@ -189,7 +197,6 @@ class EarthquakeHistoryCard extends HTMLElement {
           cursor: pointer;
         }
 
-        /* --- MAGNITUDE METERS --- */
         .mag-badge {
           width: 46px;
           height: 46px;
@@ -245,7 +252,7 @@ class EarthquakeHistoryCard extends HTMLElement {
           color: var(--accent-color);
         }
 
-        /* --- INTERACTIVE MATRICES PANEL --- */
+        /* --- EXPANDABLE PANEL --- */
         .details-panel {
           max-height: 0;
           overflow: hidden;
@@ -305,7 +312,7 @@ class EarthquakeHistoryCard extends HTMLElement {
           box-shadow: 0 0 10px rgba(0, 188, 212, 0.2);
         }
 
-        /* --- TERMINAL STREAM FOOTER FIXED & POLISHED --- */
+        /* --- STREAM FOOTER --- */
         .stream-footer {
           margin-top: 24px;
           background: #050810;
@@ -355,7 +362,7 @@ class EarthquakeHistoryCard extends HTMLElement {
           word-break: break-all;
         }
 
-        /* --- ADVANCED ANIMATIONS FLUX --- */
+        /* --- ANIMATIONS --- */
         @keyframes lens-glow {
           0% { transform: scale(0.9); opacity: 0.4; box-shadow: 0 0 4px var(--accent-color); }
           100% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 12px var(--accent-color), 0 0 20px rgba(0, 188, 212, 0.4); }
@@ -382,7 +389,6 @@ class EarthquakeHistoryCard extends HTMLElement {
       </style>
 
       <ha-card>
-        <!-- MASTER COMMAND BAY HEADER -->
         <div class="header-container">
           <div class="header-left">
             <div class="icon-bay">
@@ -395,11 +401,10 @@ class EarthquakeHistoryCard extends HTMLElement {
           </div>
           <div class="chips">
             <div class="chip active-inventory">${totalEvents} Logged</div>
-            ${dangerousEvents > 0 ? `<div class="chip danger-count">${dangerousEvents} Critical (=5M)</div>` : ''}
+            ${dangerousEvents > 0 ? `<div class="chip danger-count">${dangerousEvents} Critical (&ge; 5M)</div>` : ''}
           </div>
         </div>
 
-        <!-- TIMELINE FEED -->
         <div class="events-list">
           ${events.map(event => {
             const isExpanded = this.expandedEvents.has(event.id);
@@ -438,7 +443,6 @@ class EarthquakeHistoryCard extends HTMLElement {
           }).join('')}
         </div>
 
-        <!-- MATRIX LIVE TERMINAL NODE -->
         <div class="stream-footer">
           <div class="stream-title-row">
             <span>SEISMIC EVENT STREAM</span>
