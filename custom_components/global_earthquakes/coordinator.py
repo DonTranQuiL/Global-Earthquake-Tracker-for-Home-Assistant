@@ -1,18 +1,18 @@
 import logging
-from datetime import timedelta, datetime, timezone
+from datetime import datetime, timedelta, timezone
 
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.util import dt as dt_util
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
+from .cache import GlobalEarthquakeCache
 from .const import (
+    CONF_MIN_MAG_GLOBAL,
+    CONF_MIN_MAG_USA,
+    CONF_MONITORED_COUNTRIES,
     DOMAIN,
     URL_USGS,
-    CONF_MONITORED_COUNTRIES,
-    CONF_MIN_MAG_USA,
-    CONF_MIN_MAG_GLOBAL,
 )
-from .cache import GlobalEarthquakeCache
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -133,9 +133,12 @@ class GlobalEarthquakeCoordinator(DataUpdateCoordinator):
                         ]
                     )
 
-                    if is_usa_quake and magnitude < self.min_mag_usa:
-                        continue
-                    elif not is_usa_quake and magnitude < self.min_mag_global:
+                    if (
+                        is_usa_quake
+                        and magnitude < self.min_mag_usa
+                        or not is_usa_quake
+                        and magnitude < self.min_mag_global
+                    ):
                         continue
 
                     is_matched = "ALL" in self.monitored_countries
@@ -148,10 +151,11 @@ class GlobalEarthquakeCoordinator(DataUpdateCoordinator):
                                 ):
                                     is_matched = True
                                     break
-                            elif country == "USA" and is_usa_quake:
-                                is_matched = True
-                                break
-                            elif country.lower() in place_str.lower():
+                            elif (
+                                country == "USA"
+                                and is_usa_quake
+                                or country.lower() in place_str.lower()
+                            ):
                                 is_matched = True
                                 break
 

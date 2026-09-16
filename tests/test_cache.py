@@ -1,5 +1,6 @@
 import json
-from unittest.mock import patch, mock_open, MagicMock
+from unittest.mock import MagicMock, mock_open, patch
+
 from custom_components.global_earthquakes.cache import GlobalEarthquakeCache
 
 
