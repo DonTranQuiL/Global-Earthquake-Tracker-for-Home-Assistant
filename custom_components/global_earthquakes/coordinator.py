@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
@@ -163,7 +163,7 @@ class GlobalEarthquakeCoordinator(DataUpdateCoordinator):
                         continue
 
                     epoch_time = props.get("time", 0) / 1000.0
-                    dt = datetime.fromtimestamp(epoch_time, tz=timezone.utc)
+                    dt = datetime.fromtimestamp(epoch_time, tz=UTC)
                     time_str = dt.strftime("%d-%m-%Y %H:%M:%S UTC")
 
                     events.append(
