@@ -2,6 +2,10 @@
   "domain": "global_earthquakes",
   "name": "Global earthquakes",
   "after_dependencies": [],
+  "categories": [
+    "weather_alerts.public_warnings",
+    "local_services"
+  ],
   "codeowners": [
     "@Malosaaa"
   ],
