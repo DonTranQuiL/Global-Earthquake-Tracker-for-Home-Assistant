@@ -36,15 +36,19 @@ Bring ultra-fast, live earthquake and tsunami telemetry directly into Home Assis
 ## 📥 Installation
 
 ### Method 1: HACS (Recommended)
-The most efficient deployment method is through **HACS** (Home Assistant Community Store):
+**Global Earthquakes** is submitted to the **HACS default list**, so you can install it straight from the HACS store:
 
-1. Open **HACS** in your sidebar and navigate into the **Integrations** panel.
-2. Click the three dots (`...`) located in the upper right quadrant and select **Custom repositories**.
-3. Input the repository web link: `https://github.com/DonTranQuiL/Global-Earthquake-Tracker-for-Home-Assistant`
-4. Set the Category selector dropdown to **Integration** and hit **Add**.
-5. Locate the newly added **Global Earthquakes** repository card and hit **Download**.
-6. ⚠️ **Restart your Home Assistant instance**.
-7. Navigate to **Settings > Devices & Services > Add Integration**, lookup **Global Earthquakes**, and configure your regions.
+1. Open **HACS** in your sidebar and search for **Global Earthquakes**.
+2. Open it and click **Download**.
+3. **Restart Home Assistant.**
+4. Navigate to **Settings > Devices & Services > Add Integration**, lookup **Global Earthquakes**, and configure your regions.
+
+<details>
+<summary>Fallback: add as a custom repository</summary>
+
+If Global Earthquakes does not show up in the HACS search (yet), click the three dots (⋮) in the top right of HACS → **Custom repositories**, paste `https://github.com/DonTranQuiL/Global-Earthquake-Tracker-for-Home-Assistant` with category **Integration**, click **Add**, then continue with step 2.
+
+</details>
 
 ### Method 2: Manual Installation
 1. Download the latest release from the [Releases page](https://github.com/DonTranQuiL/Global-Earthquake-Tracker-for-Home-Assistant/releases).
