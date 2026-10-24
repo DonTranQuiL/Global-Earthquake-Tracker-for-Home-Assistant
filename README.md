@@ -74,17 +74,12 @@ Every single earthquake sensor is packed with hidden attributes for dashboard ex
 
 ---
 
-## 🗺️ Local Map Assets (Custom Icons)
-Want beautiful, highly realistic icons on your Home Assistant map? The integration features a registered static web path that prioritizes your local files over standard Material Design Icons!
-
-1. Navigate inside your core file system to `/config/custom_components/global_earthquakes/`
-2. Create a folder named `www`
-3. Drop transparent `.png` files inside that folder, named exactly:
-   * `earthquake.png`
-   * `tsunami.png`
-   * `volcano.png`
-   * `default.png`
-4. **Restart Home Assistant.** Your Live Map will dynamically swap these icons based on the disaster type!
+## 🗺️ Map Icons
+The integration ships its own map icons in `custom_components/global_earthquakes/www/`
+(`earthquake.png`, `tsunami.png`, `volcano.png`, `default.png`) and serves them at
+`/global_earthquakes_assets/`. The event sensors use them as their `entity_picture`, so the
+Home Assistant map shows them without any extra setup. To use your own icons, replace those
+files (same names) and restart Home Assistant.
 
 ---
 
@@ -218,8 +213,28 @@ columns:
       var tsuHtml = x.tsunami_warning ? `<div style="background:#7f1d1d; color:#fca5a5; border:1px solid #ef444460; padding:3px 8px; border-radius:12px; font-size:10px; font-weight:800; margin-top:4px; display:inline-block; letter-spacing:0.05em;">🌊 TSUNAMI</div>` : "";
       (alertHtml || tsuHtml) ? `<div style="display:flex; flex-direction:column; gap:4px; align-items:center;">${alertHtml}${tsuHtml}</div>` : `<span style="color:rgba(255,255,255,0.2); font-size:11px; font-weight:600;">NO ALERT</span>`
 ```
-## 🌍 The NEW JS DASHBOARD CARD NEW!!
+## 🌍 Earthquake History Card
 <img width="763" height="432" alt="sysmiccard" src="https://github.com/user-attachments/assets/416a5b32-5c63-4942-9175-9f55854b2ee4" />
+
+The card is bundled with the integration and **loads automatically**: you don't need to copy
+any file or add a dashboard resource. After installing or updating, restart Home Assistant and
+do a hard refresh of your browser. If you added `earthquake-history-card.js` as a resource by
+hand in an older version, remove that resource.
+
+```yaml
+type: custom:earthquake-history-card
+entity: sensor.earthquake_tracker_<your_instance>_history_feed
+```
+
+| Option | Required | Default | Description |
+| --- | --- | --- | --- |
+| `entity` | yes | | The **History Feed** sensor of your instance (it holds the `events` attribute). |
+| `title` | no | `Seismic Command Center` | Header title. |
+| `subtitle` | no | `Global Real-time Telemetry Engine` | Header subtitle. |
+| `max_events` | no | all | Maximum number of events listed. |
+| `critical_magnitude` | no | `5.0` | Events at or above this magnitude are counted and highlighted as critical. |
+
+Click an event to see its type, depth, tsunami warning, PAGER alert level and a map link.
 
 
 ## 🤝 Credits

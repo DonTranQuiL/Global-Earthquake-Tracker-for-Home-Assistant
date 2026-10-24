@@ -66,7 +66,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
                 if ent_reg.async_get(entity_id):
                     ent_reg.async_remove(entity_id)
 
-    coordinator.async_add_listener(async_update_entities)
+    entry.async_on_unload(coordinator.async_add_listener(async_update_entities))
     async_update_entities()
 
 

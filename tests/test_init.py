@@ -5,6 +5,7 @@ from homeassistant.core import HomeAssistant
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.global_earthquakes import (
+    async_setup,
     async_setup_entry,
     async_unload_entry,
     update_listener,
@@ -55,10 +56,12 @@ async def test_setup_entry_no_cache(hass: HomeAssistant, mock_coordinator_deps):
             "homeassistant.config_entries.ConfigEntries.async_forward_entry_setups",
             return_value=True,
         ),
-        patch("os.path.exists", return_value=True),
     ):
+        assert await async_setup(hass, {}) is True
+        hass.http.async_register_static_paths.assert_called_once()
         assert await async_setup_entry(hass, entry) is True
         mock_coord.async_config_entry_first_refresh.assert_called_once()
+        # Static path is registered once in async_setup, not per entry
         hass.http.async_register_static_paths.assert_called_once()
 
 
@@ -97,6 +100,7 @@ async def test_unload_and_services(hass: HomeAssistant, mock_coordinator_deps):
         "homeassistant.config_entries.ConfigEntries.async_forward_entry_setups",
         return_value=True,
     ):
+        await async_setup(hass, {})
         await async_setup_entry(hass, entry)
 
     await hass.services.async_call(DOMAIN, "refresh", blocking=True)
