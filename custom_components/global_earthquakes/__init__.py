@@ -56,8 +56,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     # Load structured cache containing both live and history tracks
     cache_data = await hass.async_add_executor_job(coordinator.cache.load_cache)
-    coordinator.last_data = cache_data.get("live", [])
     coordinator.history_data = cache_data.get("history", [])
+    cached_filters = cache_data.get("filters")
+    if cached_filters is not None and cached_filters != coordinator.filter_signature:
+        # Options changed since the cache was written: the live list was
+        # filtered with the old settings, so fetch fresh instead of showing it.
+        _LOGGER.debug("Filter options changed; ignoring cached live events")
+        coordinator.last_data = []
+    else:
+        coordinator.last_data = cache_data.get("live", [])
 
     if coordinator.last_data:
         # Populate states from cache and schedule the next automatic refresh

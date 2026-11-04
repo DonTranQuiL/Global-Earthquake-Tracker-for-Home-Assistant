@@ -122,3 +122,50 @@ async def test_unload_and_services(hass: HomeAssistant, mock_coordinator_deps):
         assert await async_unload_entry(hass, entry) is True
         mock_unload.assert_called_once_with(entry, PLATFORMS)
         assert entry.entry_id not in hass.data[DOMAIN]
+
+
+@pytest.mark.asyncio
+async def test_setup_entry_cache_with_changed_filters(
+    hass: HomeAssistant, mock_coordinator_deps
+):
+    """A cache written with other filter options must not be reused."""
+    mock_cache, mock_coord = mock_coordinator_deps
+    mock_coord.filter_signature = {"min_mag_usa": 2.5}
+    mock_cache.load_cache.return_value = {
+        "history": [],
+        "live": [{"id": "eq1", "magnitude": 5.0}],
+        "filters": {"min_mag_usa": 4.0},
+    }
+    entry = MockConfigEntry(domain=DOMAIN, data={"instance_name": "Test"})
+    entry.add_to_hass(hass)
+    hass.http = AsyncMock()
+    with patch(
+        "homeassistant.config_entries.ConfigEntries.async_forward_entry_setups",
+        return_value=True,
+    ):
+        assert await async_setup_entry(hass, entry) is True
+    assert mock_coord.last_data == []
+    mock_coord.async_config_entry_first_refresh.assert_called_once()
+
+
+@pytest.mark.asyncio
+async def test_setup_entry_cache_with_same_filters(
+    hass: HomeAssistant, mock_coordinator_deps
+):
+    """A cache written with the current filter options is reused."""
+    mock_cache, mock_coord = mock_coordinator_deps
+    mock_coord.filter_signature = {"min_mag_usa": 2.5}
+    mock_cache.load_cache.return_value = {
+        "history": [],
+        "live": [{"id": "eq1", "magnitude": 5.0}],
+        "filters": {"min_mag_usa": 2.5},
+    }
+    entry = MockConfigEntry(domain=DOMAIN, data={"instance_name": "Test"})
+    entry.add_to_hass(hass)
+    hass.http = AsyncMock()
+    with patch(
+        "homeassistant.config_entries.ConfigEntries.async_forward_entry_setups",
+        return_value=True,
+    ):
+        assert await async_setup_entry(hass, entry) is True
+    mock_coord.async_config_entry_first_refresh.assert_not_called()

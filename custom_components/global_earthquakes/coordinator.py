@@ -96,6 +96,15 @@ class GlobalEarthquakeCoordinator(DataUpdateCoordinator):
             hass, _LOGGER, name=DOMAIN, update_interval=timedelta(seconds=scan_interval)
         )
 
+    @property
+    def filter_signature(self) -> dict:
+        """Options that shape the cached live list."""
+        return {
+            "min_mag_usa": self.min_mag_usa,
+            "min_mag_global": self.min_mag_global,
+            "monitored_countries": sorted(self.monitored_countries),
+        }
+
     async def _async_update_data(self):
         session = async_get_clientsession(self.hass)
 
@@ -207,7 +216,11 @@ class GlobalEarthquakeCoordinator(DataUpdateCoordinator):
                 self.last_data = events
                 await self.hass.async_add_executor_job(
                     self.cache.save_cache,
-                    {"live": self.last_data, "history": self.history_data},
+                    {
+                        "live": self.last_data,
+                        "history": self.history_data,
+                        "filters": self.filter_signature,
+                    },
                 )
 
                 self.error_count = 0
