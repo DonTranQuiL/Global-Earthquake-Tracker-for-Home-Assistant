@@ -93,7 +93,7 @@ class GlobalEarthquakeCoordinator(DataUpdateCoordinator):
             "scan_interval", config_entry.data.get("scan_interval", 300)
         )
         super().__init__(
-            hass, _LOGGER, name=DOMAIN, update_interval=timedelta(seconds=scan_interval)
+            hass, _LOGGER, name=DOMAIN, update_interval=timedelta(seconds=float(scan_interval))
         )
 
     @property

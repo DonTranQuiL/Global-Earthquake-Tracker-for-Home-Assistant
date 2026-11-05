@@ -32,9 +32,18 @@ async def async_setup_entry(hass, entry, async_add_entities):
         current_ids = set()
 
         if coordinator.data:
-            num_markers = entry.options.get(
-                "map_markers", entry.data.get("map_markers", 20)
-            )
+            # NumberSelector stores floats (e.g. 20.0); slices need an int.
+            try:
+                num_markers = max(
+                    0,
+                    int(
+                        entry.options.get(
+                            "map_markers", entry.data.get("map_markers", 20)
+                        )
+                    ),
+                )
+            except (TypeError, ValueError):
+                num_markers = 20
             top_events = coordinator.data[:num_markers]
 
             for event in top_events:
@@ -88,6 +97,9 @@ class GlobalBaseEntity(CoordinatorEntity, SensorEntity):
 
 
 class GlobalEarthquakeSensor(GlobalBaseEntity):
+    # Full event list can exceed the recorder's 16 KB attribute limit; the card reads live state.
+    _unrecorded_attributes = frozenset({"history"})
+
     def __init__(self, coordinator, instance_name):
         super().__init__(coordinator, instance_name)
         self._attr_unique_id = f"{self._device_id}_main_magnitude"
@@ -138,6 +150,8 @@ class EarthquakeLastUpdateSensor(GlobalBaseEntity):
 
 
 class GlobalEarthquakeHistorySensor(GlobalBaseEntity):
+    _unrecorded_attributes = frozenset({"events"})
+
     def __init__(self, coordinator, instance_name):
         super().__init__(coordinator, instance_name)
         self._attr_unique_id = f"{self._device_id}_history_feed"

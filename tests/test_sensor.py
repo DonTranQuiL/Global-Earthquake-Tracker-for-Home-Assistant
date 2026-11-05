@@ -8,6 +8,7 @@ from custom_components.global_earthquakes.const import DOMAIN
 from custom_components.global_earthquakes.sensor import (
     EarthquakeLastUpdateSensor,
     GlobalEarthquakeEventSensor,
+    GlobalEarthquakeHistorySensor,
     GlobalEarthquakeSensor,
     async_setup_entry,
 )
@@ -88,3 +89,25 @@ async def test_async_setup_entry_manager(hass):
 
     assert async_add_entities.call_count >= 1
     assert coord.async_add_listener.called
+
+
+async def test_float_map_markers_from_number_selector(hass):
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        data={"instance_name": "Test Instance"},
+        options={"map_markers": 2.0},
+        entry_id="float_entry",
+    )
+    coord = MagicMock()
+    coord.data = [{"id": f"eq{i}", "magnitude": 5.0} for i in range(5)]
+    hass.data.setdefault(DOMAIN, {})["float_entry"] = coord
+    async_add_entities = MagicMock()
+    await async_setup_entry(hass, entry, async_add_entities)
+    dynamic = async_add_entities.call_args_list[-1].args[0]
+    assert len(dynamic) == 2
+    assert all(isinstance(e, GlobalEarthquakeEventSensor) for e in dynamic)
+
+
+def test_large_attributes_unrecorded():
+    assert "history" in GlobalEarthquakeSensor._unrecorded_attributes
+    assert "events" in GlobalEarthquakeHistorySensor._unrecorded_attributes
