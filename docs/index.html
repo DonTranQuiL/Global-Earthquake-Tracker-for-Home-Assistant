@@ -277,7 +277,7 @@
             <a href="https://github.com/DonTranQuiL/Global-Earthquake-Tracker-for-Home-Assistant/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/github/license/DonTranQuiL/Global-Earthquake-Tracker-for-Home-Assistant?style=for-the-badge&color=007ec6" alt="License"></a>
             <a href="https://github.com/DonTranQuiL/Global-Earthquake-Tracker-for-Home-Assistant/actions/workflows/hass-ci.yml" target="_blank"><img src="https://img.shields.io/github/actions/workflow/status/DonTranQuiL/Global-Earthquake-Tracker-for-Home-Assistant/hass-ci.yml?label=Home%20Assistant%20CI&style=for-the-badge" alt="Home Assistant CI"></a>
             <a href="https://github.com/DonTranQuiL/Global-Earthquake-Tracker-for-Home-Assistant/actions" target="_blank"><img src="https://img.shields.io/github/actions/workflow/status/DonTranQuiL/Global-Earthquake-Tracker-for-Home-Assistant/codechecker.yml?style=for-the-badge&label=CODE%20CHECKS&color=5dbb0f" alt="Code Checks"></a>
-            <a href="https://hacs.xyz/" target="_blank"><img src="https://img.shields.io/badge/HACS-CUSTOM-ff6e27?style=for-the-badge" alt="HACS Custom"></a>
+            <a href="https://hacs.xyz/" target="_blank"><img src="https://img.shields.io/badge/HACS-Default-41BDF5?style=for-the-badge" alt="HACS Default"></a>
             <a href="https://www.home-assistant.io/" target="_blank"><img src="https://img.shields.io/badge/Home%20Assistant-2025.1%2B-007ec6?style=for-the-badge" alt="Home Assistant Version"></a>
             <a href="https://ko-fi.com/DonTranQuiL" target="_blank"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-ffdd00?style=for-the-badge" alt="Donate"></a>
             <span style="display:inline-block;vertical-align:middle"><script src="https://liberapay.com/Malosaaa/widgets/button.js"></script><noscript><a href="https://liberapay.com/Malosaaa/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript></span>
@@ -323,18 +323,23 @@
     <section class="glass-panel animate-on-scroll">
         <h2>📥 Installation</h2>
         
-        <h3>Method 1: HACS (Recommended)</h3>
+        <h3>Method 1: Marketplace (Home Assistant 2026.11+, Recommended)</h3>
+        <p><a href="https://my.home-assistant.io/redirect/marketplace_repository/?owner=DonTranQuiL&amp;repository=Global-Earthquake-Tracker-for-Home-Assistant&amp;category=integration" target="_blank"><img src="https://my.home-assistant.io/badges/marketplace_repository.svg" alt="Open this repository in the Home Assistant Marketplace"></a></p>
         <ol>
-            <li>Open <strong>HACS</strong> in your sidebar and navigate into the <strong>Integrations</strong> panel.</li>
-            <li>Click the three dots (<code>...</code>) located in the upper right quadrant and select <strong>Custom repositories</strong>.</li>
-            <li>Input the repository web link: <code>https://github.com/DonTranQuiL/Global-Earthquake-Tracker-for-Home-Assistant</code></li>
-            <li>Set the Category selector dropdown to <strong>Integration</strong> and hit <strong>Add</strong>.</li>
-            <li>Locate the newly added <strong>Global Earthquakes</strong> repository card and hit <strong>Download</strong>.</li>
-            <li>⚠️ <strong>Restart your Home Assistant instance</strong>.</li>
-            <li>Navigate to <strong>Settings > Devices & Services > Add Integration</strong>, lookup <strong>Global Earthquakes</strong>, and configure your regions.</li>
+            <li>In Home Assistant, go to <strong>Settings &gt; Marketplace</strong> and search for <strong>Global Earthquakes</strong> (or use the button above).</li>
+            <li>Open it and select <strong>Install</strong>. The setup starts right away, no restart needed.</li>
         </ol>
 
-        <h3 style="margin-top: 2rem;">Method 2: Manual Installation</h3>
+        <h3 style="margin-top: 2rem;">Method 2: HACS (Home Assistant before 2026.11)</h3>
+        <p><strong>Global Earthquakes</strong> is in the <strong>HACS default list</strong>, so no custom repository is needed. <a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=DonTranQuiL&amp;repository=Global-Earthquake-Tracker-for-Home-Assistant&amp;category=integration" target="_blank">Open in HACS</a></p>
+        <ol>
+            <li>Open <strong>HACS</strong> in your sidebar and search for <strong>Global Earthquakes</strong>.</li>
+            <li>Open it and hit <strong>Download</strong>.</li>
+            <li>⚠️ <strong>Restart your Home Assistant instance</strong>.</li>
+            <li>Navigate to <strong>Settings &gt; Devices &amp; Services &gt; Add Integration</strong>, lookup <strong>Global Earthquakes</strong>, and configure your regions.</li>
+        </ol>
+
+        <h3 style="margin-top: 2rem;">Method 3: Manual Installation</h3>
         <ol>
             <li>Download the latest release from the <a href="https://github.com/DonTranQuiL/Global-Earthquake-Tracker-for-Home-Assistant/releases" target="_blank">Releases page</a>.</li>
             <li>Extract the <code>global_earthquakes</code> folder into your Home Assistant's <code>custom_components</code> directory.</li>
