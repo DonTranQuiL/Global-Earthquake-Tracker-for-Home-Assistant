@@ -108,6 +108,24 @@ async def test_float_map_markers_from_number_selector(hass):
     assert all(isinstance(e, GlobalEarthquakeEventSensor) for e in dynamic)
 
 
+@pytest.mark.parametrize("data", [None, {"not": "a list"}, []])
+async def test_update_entities_non_list_data(hass, data):
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        data={"instance_name": "Test Instance"},
+        options={"map_markers": 20.0},
+        entry_id="nonlist_entry",
+    )
+    coord = MagicMock()
+    coord.data = data
+    hass.data.setdefault(DOMAIN, {})["nonlist_entry"] = coord
+    async_add_entities = MagicMock()
+    await async_setup_entry(hass, entry, async_add_entities)
+    # Only the three static sensors; no event sensors and no exception.
+    assert async_add_entities.call_count == 1
+    assert coord.async_add_listener.called
+
+
 def test_large_attributes_unrecorded():
     assert "history" in GlobalEarthquakeSensor._unrecorded_attributes
     assert "events" in GlobalEarthquakeHistorySensor._unrecorded_attributes

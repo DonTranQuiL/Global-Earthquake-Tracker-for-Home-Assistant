@@ -129,7 +129,16 @@ class GlobalEarthquakeCoordinator(DataUpdateCoordinator):
                     if magnitude is None:
                         continue
 
-                    place_str = props.get("place", "Unknown Location")
+                    # USGS may send "place": null; dict.get default won't apply.
+                    place = props.get("place")
+                    place_str = (
+                        place
+                        if isinstance(place, str) and place
+                        else "Unknown Location"
+                    )
+                    event_type = props.get("type")
+                    if not isinstance(event_type, str) or not event_type:
+                        event_type = "unknown"
 
                     is_usa_quake = any(
                         state in place_str
@@ -190,7 +199,7 @@ class GlobalEarthquakeCoordinator(DataUpdateCoordinator):
                             else 0.0,
                             "latitude": coordinates[1],
                             "longitude": coordinates[0],
-                            "event_type": props.get("type", "unknown").capitalize(),
+                            "event_type": event_type.capitalize(),
                             "tsunami_warning": props.get("tsunami", 0) == 1,
                             "alert_level": props.get("alert").capitalize()
                             if props.get("alert")

@@ -31,7 +31,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
         new_entities = []
         current_ids = set()
 
-        if coordinator.data:
+        if isinstance(coordinator.data, list) and coordinator.data:
             # NumberSelector stores floats (e.g. 20.0); slices need an int.
             try:
                 num_markers = max(

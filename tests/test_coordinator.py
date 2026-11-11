@@ -160,3 +160,63 @@ async def test_coordinator_exception_handling(
     result = await coord._async_update_data()
     assert coord.error_count == 1
     assert result == []
+
+
+@pytest.mark.asyncio
+@patch("custom_components.global_earthquakes.coordinator.async_get_clientsession")
+@patch("custom_components.global_earthquakes.coordinator.GlobalEarthquakeCache")
+async def test_coordinator_null_place_and_type(
+    mock_cache_cls, mock_get_session, hass: HomeAssistant, mock_cache
+):
+    """USGS can send explicit nulls; they must not abort the feed parse."""
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        data={"instance_name": "Test"},
+        options={
+            "min_mag_usa": 2.5,
+            "min_mag_global": 4.5,
+            "monitored_countries": ["ALL"],
+        },
+    )
+    mock_cache_cls.return_value = mock_cache
+    coord = GlobalEarthquakeCoordinator(hass, entry)
+
+    mock_resp = AsyncMock()
+    mock_resp.status = 200
+    mock_resp.json.return_value = _get_mock_feed(
+        [
+            {
+                "id": "eq_null_place",
+                "properties": {"mag": 6.0, "place": None, "time": 0},
+                "geometry": {"coordinates": [0, 0, 0]},
+            },
+            {
+                "id": "eq_missing_place",
+                "properties": {"mag": 5.5, "time": 0},
+                "geometry": {"coordinates": [0, 0, 0]},
+            },
+            {
+                "id": "eq_null_type",
+                "properties": {
+                    "mag": 5.0,
+                    "place": "Fiji region",
+                    "type": None,
+                    "time": 0,
+                },
+                "geometry": {"coordinates": [0, 0, 0]},
+            },
+        ]
+    )
+    mock_session = MagicMock()
+    mock_session.get.return_value.__aenter__.return_value = mock_resp
+    mock_get_session.return_value = mock_session
+
+    result = await coord._async_update_data()
+
+    assert coord.error_count == 0
+    by_id = {e["id"]: e for e in result}
+    assert set(by_id) == {"eq_null_place", "eq_missing_place", "eq_null_type"}
+    assert by_id["eq_null_place"]["location"] == "Unknown Location"
+    assert by_id["eq_missing_place"]["location"] == "Unknown Location"
+    assert by_id["eq_null_type"]["location"] == "Fiji region"
+    assert by_id["eq_null_type"]["event_type"] == "Unknown"
